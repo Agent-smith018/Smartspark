@@ -37,12 +37,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
 
     // Google Maps & Location
     implementation(libs.play.services.maps)

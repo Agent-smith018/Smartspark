@@ -56,16 +56,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Enter your details to register"
+                android:text="Choose your role and register"
                 android:textColor="#757575"
                 android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_role"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <RadioButton
+                    android:id="@+id/rb_driver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Driver"
+                    android:checked="true"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/black"
+                    android:buttonTint="@color/primary_blue"/>
+
+                <RadioButton
+                    android:id="@+id/rb_owner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner"
+                    android:textColor="@color/black"
+                    android:buttonTint="@color/primary_blue"/>
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_signup_name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:hint="Full Name"
                 app:boxStrokeColor="@color/primary_blue"
                 app:hintTextColor="@color/primary_blue"

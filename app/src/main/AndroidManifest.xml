@@ -43,6 +43,14 @@
             android:name=".HomeActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".OwnerHomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AddParkingSpotActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

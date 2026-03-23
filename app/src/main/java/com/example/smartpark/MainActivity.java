@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,13 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSignup, tvForgotPassword;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            navigateToHome();
+            checkUserRoleAndNavigate(currentUser.getUid());
         }
     }
 
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
@@ -95,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
         String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
         String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
 
-        // Reset errors
         etEmail.setError(null);
         etPassword.setError(null);
 
@@ -115,14 +118,41 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
-                    progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                        navigateToHome();
+                        checkUserRoleAndNavigate(mAuth.getCurrentUser().getUid());
                     } else {
+                        progressBar.setVisibility(View.GONE);
                         handleLoginError(task.getException());
                     }
                 });
+    }
+
+    private void checkUserRoleAndNavigate(String uid) {
+        progressBar.setVisibility(View.VISIBLE);
+        db.collection("users").document(uid).get().addOnCompleteListener(task -> {
+            progressBar.setVisibility(View.GONE);
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String role = document.getString("role");
+                    if ("owner".equals(role)) {
+                        startActivity(new Intent(MainActivity.this, OwnerHomeActivity.class));
+                    } else {
+                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    }
+                    finish();
+                } else {
+                    // Fallback if document doesn't exist
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    finish();
+                }
+            } else {
+                Toast.makeText(MainActivity.this, "Error fetching user role", Toast.LENGTH_SHORT).show();
+                // Fallback
+                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                finish();
+            }
+        });
     }
 
     private void handleLoginError(Exception exception) {
@@ -135,12 +165,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(MainActivity.this, "Login failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void navigateToHome() {
-        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        finish();
     }
 }
