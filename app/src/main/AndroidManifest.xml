@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Smartpark">
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddParkingSpotActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OwnerSpotActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

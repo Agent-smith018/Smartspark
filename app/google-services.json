@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "711495876515",
+    "project_id": "smartpark-d3faf",
+    "storage_bucket": "smartpark-d3faf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711495876515:android:ce160996c9e507ebdf2416",
+        "android_client_info": {
+          "package_name": "com.example.smartpark"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtlrIRsu8xdirGGE_5KjsR5W_Mq_I_Bhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
