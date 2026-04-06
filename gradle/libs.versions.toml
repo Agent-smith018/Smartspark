@@ -9,9 +9,8 @@ activity = "1.12.4"
 constraintlayout = "2.2.1"
 googleServices = "4.4.4"
 firebaseBom = "34.10.0"
-credentials = "1.5.0"
-credentialsPlayServicesAuth = "1.5.0"
-googleid = "1.2.0"
+playServicesMaps = "20.0.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,10 +23,9 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
-firebase-database = { group = "com.google.firebase", name = "firebase-database" }
-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
-googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
