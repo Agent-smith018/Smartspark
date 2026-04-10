@@ -19,7 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -46,7 +45,6 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         Button btnLogout = findViewById(R.id.btn_logout);
-        ExtendedFloatingActionButton fabAddParking = findViewById(R.id.fabAddParking);
         FloatingActionButton fabMyLocation = findViewById(R.id.fabMyLocation);
 
         btnLogout.setOnClickListener(v -> {
@@ -56,11 +54,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             finish();
         });
 
-        fabAddParking.setOnClickListener(v -> {
-            Toast.makeText(this, "Add Parking Feature Coming Soon!", Toast.LENGTH_SHORT).show();
-        });
-
         fabMyLocation.setOnClickListener(v -> getDeviceLocation());
+
+        android.widget.ImageView ivProfile = findViewById(R.id.iv_profile);
+        if (ivProfile != null) {
+            ivProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     @Override

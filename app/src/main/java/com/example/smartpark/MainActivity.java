@@ -156,6 +156,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleLoginError(Exception exception) {
+        if (exception == null) {
+            Toast.makeText(MainActivity.this, "Login failed. Please try again.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (exception instanceof FirebaseAuthInvalidUserException) {
             etEmail.setError("No account found with this email");
             etEmail.requestFocus();

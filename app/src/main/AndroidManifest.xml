@@ -51,6 +51,10 @@
             android:name=".AddParkingSpotActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
