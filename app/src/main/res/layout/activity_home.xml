@@ -101,9 +101,10 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="340dp"
+        android:layout_marginBottom="72dp"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
+        app:behavior_peekHeight="190dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="16dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -131,10 +132,45 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_detail_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Details will appear here"
+                android:text="Status: -"
+                android:textColor="#757575" />
+
+            <TextView
+                android:id="@+id/tv_detail_added_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Added Time: -"
+                android:textColor="#757575" />
+
+            <TextView
+                android:id="@+id/tv_detail_user_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="User ID: -"
+                android:textColor="#757575" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_navigate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Navigate"
+                app:backgroundTint="@color/primary_blue"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_close_sheet"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Close"
                 android:textColor="#757575" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
