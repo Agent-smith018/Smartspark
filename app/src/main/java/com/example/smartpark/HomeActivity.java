@@ -69,11 +69,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add some dummy parking markers (Ahmedabad coordinates as example)
-        LatLng parking1 = new LatLng(23.0225, 72.5714);
+        // Add sample parking markers around Montreal.
+        LatLng parking1 = new LatLng(45.5017, -73.5673);
         mMap.addMarker(new MarkerOptions().position(parking1).title("Parking Slot A"));
 
-        LatLng parking2 = new LatLng(23.0338, 72.5850);
+        LatLng parking2 = new LatLng(45.5088, -73.5540);
         mMap.addMarker(new MarkerOptions().position(parking2).title("Parking Slot B"));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parking1, 12));
