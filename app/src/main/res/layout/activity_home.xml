@@ -72,29 +72,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:contentDescription="My Location"
             app:backgroundTint="@color/white"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@id/fabAddParking"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/ic_menu_mylocation"
             app:tint="@color/primary_blue" />
-
-        <!-- Add Parking Extended FAB (More Professional) -->
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fabAddParking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
-            android:text="Add Spot"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/primary_blue"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Subtle Logout at bottom left -->
         <com.google.android.material.button.MaterialButton

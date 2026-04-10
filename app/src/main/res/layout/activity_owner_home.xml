@@ -73,21 +73,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Easily add and monitor your parking locations."
+                    android:text="Easily monitor your parking locations."
                     android:textColor="#757575"
                     android:textSize="14sp" />
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/btn_add_spot_owner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="ADD NEW PARKING SPOT"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    app:backgroundTint="@color/primary_blue"
-                    app:icon="@android:drawable/ic_input_add"
-                    app:iconTint="@color/white" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_logout_owner"

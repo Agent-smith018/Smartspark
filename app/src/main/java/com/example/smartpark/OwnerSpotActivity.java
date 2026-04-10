@@ -2,8 +2,6 @@ package com.example.smartpark;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +18,6 @@ public class OwnerSpotActivity extends AppCompatActivity {
     private RecyclerView rvSpots;
     private ArrayList<ParkingSpot> spotList;
     private ParkingSpotAdapter adapter;
-    private Button btnAddSpotLarge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +25,6 @@ public class OwnerSpotActivity extends AppCompatActivity {
         setContentView(R.layout.activity_owner_spot);
 
         rvSpots = findViewById(R.id.rv_spots);
-        btnAddSpotLarge = findViewById(R.id.btn_add_spot_large);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
         // Setup RecyclerView
@@ -42,15 +38,6 @@ public class OwnerSpotActivity extends AppCompatActivity {
         // Adapter
         adapter = new ParkingSpotAdapter(this, spotList);
         rvSpots.setAdapter(adapter);
-
-        // Add Button Logic
-        btnAddSpotLarge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(OwnerSpotActivity.this, AddParkingSpotActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
 
         // Bottom Navigation (Icons)
         bottomNav.setSelectedItemId(R.id.nav_spots);
