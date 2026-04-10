@@ -37,6 +37,7 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
 
     private TextInputEditText etSpotName, etSpotAddress, etSpotPrice;
     private AutoCompleteTextView actvSpotStatus;
+        private AutoCompleteTextView actvParkingType;
     private TextView tvSelectedLocation;
     private Button btnSaveSpot;
     private ProgressBar progressBar;
@@ -60,11 +61,13 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         etSpotAddress = findViewById(R.id.et_spot_address);
         etSpotPrice = findViewById(R.id.et_spot_price);
         actvSpotStatus = findViewById(R.id.actv_spot_status);
+        actvParkingType = findViewById(R.id.actv_parking_type);
         tvSelectedLocation = findViewById(R.id.tv_selected_location);
         btnSaveSpot = findViewById(R.id.btn_save_spot);
         progressBar = findViewById(R.id.save_progress);
 
         setupStatusDropdown();
+        setupTypeDropdown();
         setupMap();
 
         btnSaveSpot.setOnClickListener(v -> saveParkingSpot());
@@ -96,6 +99,17 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         );
         actvSpotStatus.setAdapter(statusAdapter);
         actvSpotStatus.setText(getString(R.string.status_available), false);
+    }
+
+    private void setupTypeDropdown() {
+        String[] parkingTypes = {"Free", "Paid", "Street Parking", "Private Lot"};
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                parkingTypes
+        );
+        actvParkingType.setAdapter(typeAdapter);
+        actvParkingType.setText("Free", false);
     }
 
     private void setupMap() {
@@ -159,6 +173,7 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         String address = etSpotAddress.getText() != null ? etSpotAddress.getText().toString().trim() : "";
         String price = etSpotPrice.getText() != null ? etSpotPrice.getText().toString().trim() : "";
         String status = actvSpotStatus.getText() != null ? actvSpotStatus.getText().toString().trim() : "";
+        String type = actvParkingType.getText() != null ? actvParkingType.getText().toString().trim() : "";
 
         if (TextUtils.isEmpty(name)) {
             etSpotName.setError("Name is required");
@@ -184,6 +199,11 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
             actvSpotStatus.setError("Status is required");
             return;
         }
+        
+        if (TextUtils.isEmpty(type)) {
+            actvParkingType.setError("Parking type is required");
+            return;
+        }
 
         if (mAuth.getCurrentUser() == null) {
             Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
@@ -201,6 +221,7 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         spot.put("latitude", selectedLatLng.latitude);
         spot.put("longitude", selectedLatLng.longitude);
         spot.put("status", status.toLowerCase());
+        spot.put("type", type.toLowerCase());
         spot.put("addedAt", FieldValue.serverTimestamp());
 
         db.collection("parking_spots")

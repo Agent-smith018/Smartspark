@@ -55,6 +55,7 @@ public class ParkingSpotListAdapter extends RecyclerView.Adapter<ParkingSpotList
         private TextView tvSpotName;
         private TextView tvSpotStatus;
         private TextView tvSpotDistance;
+        private TextView tvSpotType;
         private OnSpotClickListener clickListener;
         private ParkingSpotMapInfo currentSpot;
 
@@ -65,6 +66,7 @@ public class ParkingSpotListAdapter extends RecyclerView.Adapter<ParkingSpotList
             tvSpotName = itemView.findViewById(R.id.tv_spot_list_name);
             tvSpotStatus = itemView.findViewById(R.id.tv_spot_list_status);
             tvSpotDistance = itemView.findViewById(R.id.tv_spot_list_distance);
+            tvSpotType = itemView.findViewById(R.id.tv_spot_list_type);
 
             itemView.setOnClickListener(v -> {
                 if (clickListener != null && currentSpot != null) {
@@ -82,6 +84,10 @@ public class ParkingSpotListAdapter extends RecyclerView.Adapter<ParkingSpotList
             tvSpotStatus.setText(statusText);
             int statusColor = "available".equalsIgnoreCase(spot.status) ? 0xFF4CAF50 : 0xFFE53935;
             tvSpotStatus.setTextColor(statusColor);
+
+            // Type (e.g. Free, Paid, Street)
+            String typeText = spot.type != null ? spot.type.substring(0, 1).toUpperCase() + spot.type.substring(1).toLowerCase() : "Free";
+            tvSpotType.setText(typeText);
 
             // Distance formatting
             if (spot.distance >= 0) {

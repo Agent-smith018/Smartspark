@@ -10,7 +10,9 @@ public class ParkingSpotMapInfo {
     public final double longitude;
     public float distance = -1;
 
-    public ParkingSpotMapInfo(String spotId, String name, String status, String lastUpdatedTime, String userId, double latitude, double longitude) {
+        public final String type; // free, paid, street, private
+
+        public ParkingSpotMapInfo(String spotId, String name, String status, String lastUpdatedTime, String userId, double latitude, double longitude, String type) {
         this.spotId = spotId;
         this.name = name;
         this.status = status;
@@ -18,5 +20,11 @@ public class ParkingSpotMapInfo {
         this.userId = userId;
         this.latitude = latitude;
         this.longitude = longitude;
+            this.type = type != null ? type : "free";
+        }
+
+        // Backward compatibility constructor
+        public ParkingSpotMapInfo(String spotId, String name, String status, String lastUpdatedTime, String userId, double latitude, double longitude) {
+            this(spotId, name, status, lastUpdatedTime, userId, latitude, longitude, "free");
     }
 }

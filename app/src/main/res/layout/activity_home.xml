@@ -96,8 +96,87 @@
                     android:src="@android:drawable/ic_menu_myplaces"
                     app:tint="@color/primary_blue" />
             </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+
+                <!-- Parking Type Filter Options -->
+                <LinearLayout
+                    android:id="@+id/layout_type_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Filter by parking type:"
+                        android:textColor="#5F6368"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_free"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Free"
+                            android:textColor="#5F6368"
+                            android:textSize="12sp" />
+
+                        <CheckBox
+                            android:id="@+id/cb_paid"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Paid"
+                            android:textColor="#5F6368"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_street"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Street Parking"
+                            android:textColor="#5F6368"
+                            android:textSize="12sp" />
+
+                        <CheckBox
+                            android:id="@+id/cb_private"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Private Lot"
+                            android:textColor="#5F6368"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Filter Toggle Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_toggle_type_filter"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Show Filter"
+                    android:textColor="@color/primary_blue"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     <!-- 3. Bottom Controls Container -->
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -76,6 +76,12 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ListenerRegistration parkingSpotsListener;
     private boolean showAvailableOnly;
 
+        private boolean filterFree = true;
+        private boolean filterPaid = true;
+        private boolean filterStreet = true;
+        private boolean filterPrivate = true;
+        private boolean typeFiltersVisible = false;
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final LatLng MONTREAL = new LatLng(45.5017, -73.5673);
     private static final long SPOT_EXPIRY_MILLIS = 24L * 60L * 60L * 1000L;
@@ -148,6 +154,37 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         btnSearchLocation.setOnClickListener(v -> searchLocation());
+
+            // Initialize parking type filters
+            android.view.View layoutTypeFilters = findViewById(R.id.layout_type_filters);
+            android.widget.Button btnToggleFilter = findViewById(R.id.btn_toggle_type_filter);
+            android.widget.CheckBox cbFree = findViewById(R.id.cb_free);
+            android.widget.CheckBox cbPaid = findViewById(R.id.cb_paid);
+            android.widget.CheckBox cbStreet = findViewById(R.id.cb_street);
+            android.widget.CheckBox cbPrivate = findViewById(R.id.cb_private);
+
+            btnToggleFilter.setOnClickListener(v -> {
+                typeFiltersVisible = !typeFiltersVisible;
+                layoutTypeFilters.setVisibility(typeFiltersVisible ? android.view.View.VISIBLE : android.view.View.GONE);
+                btnToggleFilter.setText(typeFiltersVisible ? "Hide Filter" : "Show Filter");
+            });
+
+            cbFree.setOnCheckedChangeListener((button, isChecked) -> {
+                filterFree = isChecked;
+                startParkingSpotsRealtimeListener();
+            });
+            cbPaid.setOnCheckedChangeListener((button, isChecked) -> {
+                filterPaid = isChecked;
+                startParkingSpotsRealtimeListener();
+            });
+            cbStreet.setOnCheckedChangeListener((button, isChecked) -> {
+                filterStreet = isChecked;
+                startParkingSpotsRealtimeListener();
+            });
+            cbPrivate.setOnCheckedChangeListener((button, isChecked) -> {
+                filterPrivate = isChecked;
+                startParkingSpotsRealtimeListener();
+            });
         etLocationSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
                 searchLocation();
@@ -291,6 +328,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                             continue;
                         }
 
+                            // Get parking type and apply type filter
+                            String parkingType = doc.getString("type");
+                            if (parkingType == null || parkingType.trim().isEmpty()) {
+                                parkingType = "free";
+                            }
+                            if (!shouldIncludeType(parkingType)) {
+                                continue;
+                            }
+
                         Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude))
                                 .title(markerTitle)
@@ -304,7 +350,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     lastUpdatedTime,
                                     userId,
                                     latitude,
-                                    longitude
+                                    longitude,
+                                        parkingType
                             );
                             markerSpotMap.put(marker, spotInfo);
                             spotList.add(spotInfo);
@@ -334,6 +381,18 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         long age = System.currentTimeMillis() - addedAt.toDate().getTime();
         return age > SPOT_EXPIRY_MILLIS;
     }
+
+        private boolean shouldIncludeType(String type) {
+            if (type == null || type.trim().isEmpty()) {
+                return filterFree;
+            }
+            String lowerType = type.toLowerCase();
+            if (lowerType.contains("free")) return filterFree;
+            if (lowerType.contains("paid")) return filterPaid;
+            if (lowerType.contains("street")) return filterStreet;
+            if (lowerType.contains("private")) return filterPrivate;
+            return filterFree; // default to free if type not recognized
+        }
 
     private void deleteExpiredSpots(List<String> expiredSpotIds) {
         for (String spotId : expiredSpotIds) {
