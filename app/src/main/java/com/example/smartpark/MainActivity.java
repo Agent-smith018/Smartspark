@@ -119,7 +119,13 @@ public class MainActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        checkUserRoleAndNavigate(mAuth.getCurrentUser().getUid());
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            checkUserRoleAndNavigate(user.getUid());
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(MainActivity.this, "Unable to get user information", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         progressBar.setVisibility(View.GONE);
                         handleLoginError(task.getException());
@@ -135,24 +141,31 @@ public class MainActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     String role = document.getString("role");
-                    if ("owner".equals(role)) {
-                        startActivity(new Intent(MainActivity.this, OwnerHomeActivity.class));
-                    } else {
-                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                    }
+                    navigateByRole(role);
                     finish();
                 } else {
-                    // Fallback if document doesn't exist
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    navigateByRole(null);
                     finish();
                 }
             } else {
                 Toast.makeText(MainActivity.this, "Error fetching user role", Toast.LENGTH_SHORT).show();
-                // Fallback
-                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                navigateByRole(null);
                 finish();
             }
         });
+    }
+
+    private void navigateByRole(String role) {
+        Intent intent;
+        if ("owner".equalsIgnoreCase(role)) {
+            intent = new Intent(MainActivity.this, OwnerDashboardActivity.class);
+        } else if ("admin".equalsIgnoreCase(role)) {
+            intent = new Intent(MainActivity.this, AdminDashboardActivity.class);
+        } else {
+            // Default driver flow.
+            intent = new Intent(MainActivity.this, HomeActivity.class);
+        }
+        startActivity(intent);
     }
 
     private void handleLoginError(Exception exception) {

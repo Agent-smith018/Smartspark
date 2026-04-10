@@ -48,6 +48,22 @@
             android:exported="false" />
 
         <activity
+            android:name=".OwnerDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminReportsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DriverFavoritesActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".AddParkingSpotActivity"
             android:exported="false" />
 

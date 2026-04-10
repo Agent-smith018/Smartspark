@@ -24,6 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextInputEditText etEditName;
     private Button btnUpdateName;
     private Button btnLogout;
+    private Button btnViewFavorites;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -45,12 +46,15 @@ public class ProfileActivity extends AppCompatActivity {
         etEditName = findViewById(R.id.et_edit_name);
         btnUpdateName = findViewById(R.id.btn_update_name);
         btnLogout = findViewById(R.id.btn_logout);
+        btnViewFavorites = findViewById(R.id.btn_view_favorites);
 
         loadProfileData();
         loadSpotStats();
 
         btnUpdateName.setOnClickListener(v -> updateName());
         btnLogout.setOnClickListener(v -> logout());
+        btnViewFavorites.setOnClickListener(v ->
+            startActivity(new Intent(ProfileActivity.this, DriverFavoritesActivity.class)));
     }
 
     private void loadProfileData() {
@@ -123,7 +127,10 @@ public class ProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     String role = documentSnapshot.getString("role");
                     if ("owner".equalsIgnoreCase(role)) {
-                        startActivity(new Intent(ProfileActivity.this, OwnerHomeActivity.class));
+                        startActivity(new Intent(ProfileActivity.this, OwnerDashboardActivity.class));
+                        finish();
+                    } else if ("admin".equalsIgnoreCase(role)) {
+                        startActivity(new Intent(ProfileActivity.this, AdminDashboardActivity.class));
                         finish();
                     }
                 });

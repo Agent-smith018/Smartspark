@@ -1,5 +1,7 @@
 package com.example.smartpark;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddParkingSpotActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     private TextInputEditText etSpotName, etSpotAddress, etSpotPrice;
     private AutoCompleteTextView actvSpotStatus;
@@ -105,6 +110,7 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MONTREAL, 12f));
+        enableMyLocation();
 
         mMap.setOnMapClickListener(latLng -> {
             selectedLatLng = latLng;
@@ -116,6 +122,36 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
                     latLng.longitude
             ));
         });
+    }
+
+    private void enableMyLocation() {
+        if (mMap == null) {
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE
+            );
+            return;
+        }
+
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            enableMyLocation();
+        }
     }
 
     private void saveParkingSpot() {
