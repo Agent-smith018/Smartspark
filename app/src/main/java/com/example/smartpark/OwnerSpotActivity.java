@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -24,8 +26,9 @@ public class OwnerSpotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_spot);
 
+        enforceOwnerAccess();
+
         rvSpots = findViewById(R.id.rv_spots);
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
         // Setup RecyclerView
         rvSpots.setLayoutManager(new LinearLayoutManager(this));
@@ -38,9 +41,24 @@ public class OwnerSpotActivity extends AppCompatActivity {
         // Adapter
         adapter = new ParkingSpotAdapter(this, spotList);
         rvSpots.setAdapter(adapter);
+    }
 
-        // Bottom Navigation (Icons)
-        bottomNav.setSelectedItemId(R.id.nav_spots);
+    private void enforceOwnerAccess() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(OwnerSpotActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"owner".equalsIgnoreCase(role)) {
+                        startActivity(new Intent(OwnerSpotActivity.this, HomeActivity.class));
+                        finish();
+                    }
+                });
     }
 
     @Override

@@ -36,6 +36,8 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        enforceDriverAccess();
+
         tvProfileName = findViewById(R.id.tv_profile_name);
         tvProfileEmail = findViewById(R.id.tv_profile_email);
         tvTotalSpots = findViewById(R.id.tv_total_spots);
@@ -100,13 +102,8 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     }
 
-                    // Fallback for datasets that use ownerId instead of userId.
-                    if (total == 0) {
-                        loadSpotStatsByOwnerId(uid);
-                    } else {
-                        tvTotalSpots.setText(String.valueOf(total));
-                        tvActiveSpots.setText(String.valueOf(active));
-                    }
+                    tvTotalSpots.setText(String.valueOf(total));
+                    tvActiveSpots.setText(String.valueOf(active));
                 })
                 .addOnFailureListener(e -> {
                     tvTotalSpots.setText("0");
@@ -114,27 +111,21 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void loadSpotStatsByOwnerId(String uid) {
-        db.collection("parking_spots")
-                .whereEqualTo("ownerId", uid)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    int total = querySnapshot.size();
-                    int active = 0;
+    private void enforceDriverAccess() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
 
-                    for (QueryDocumentSnapshot doc : querySnapshot) {
-                        String status = doc.getString("status");
-                        if (status != null && status.equalsIgnoreCase("available")) {
-                            active++;
-                        }
+        db.collection("users").document(currentUser.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if ("owner".equalsIgnoreCase(role)) {
+                        startActivity(new Intent(ProfileActivity.this, OwnerHomeActivity.class));
+                        finish();
                     }
-
-                    tvTotalSpots.setText(String.valueOf(total));
-                    tvActiveSpots.setText(String.valueOf(active));
-                })
-                .addOnFailureListener(e -> {
-                    tvTotalSpots.setText("0");
-                    tvActiveSpots.setText("0");
                 });
     }
 

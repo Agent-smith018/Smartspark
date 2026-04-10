@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -48,6 +49,7 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        enforceOwnerAccess();
 
         etSpotName = findViewById(R.id.et_spot_name);
         etSpotAddress = findViewById(R.id.et_spot_address);
@@ -61,6 +63,24 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         setupMap();
 
         btnSaveSpot.setOnClickListener(v -> saveParkingSpot());
+    }
+
+    private void enforceOwnerAccess() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new android.content.Intent(AddParkingSpotActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        db.collection("users").document(currentUser.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"owner".equalsIgnoreCase(role)) {
+                        startActivity(new android.content.Intent(AddParkingSpotActivity.this, HomeActivity.class));
+                        finish();
+                    }
+                });
     }
 
     private void setupStatusDropdown() {

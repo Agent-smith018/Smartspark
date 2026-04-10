@@ -27,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -66,6 +67,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        enforceDriverAccess();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -109,6 +111,24 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             });
         }
+    }
+
+    private void enforceDriverAccess() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(HomeActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        db.collection("users").document(currentUser.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if ("owner".equalsIgnoreCase(role)) {
+                        startActivity(new Intent(HomeActivity.this, OwnerHomeActivity.class));
+                        finish();
+                    }
+                });
     }
 
     @Override
