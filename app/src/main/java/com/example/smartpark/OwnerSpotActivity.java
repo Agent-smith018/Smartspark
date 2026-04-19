@@ -1,88 +1,77 @@
 package com.example.smartpark;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
+import com.example.smartpark.R;
+import com.example.smartpark.adapters.SpotAdapter;
+import com.parking.mr.data.Spot;
+import com.parking.manager.data.SpotRepository;
+import java.util.List;
 
 public class OwnerSpotActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CODE = 1;
-    private RecyclerView rvSpots;
-    private ArrayList<ParkingSpot> spotList;
-    private ParkingSpotAdapter adapter;
-    private Button btnAddSpotLarge;
+    private RecyclerView recyclerView;
+    private SpotAdapter adapter;
+    private SpotRepository repository;
+    private TextView tvActualValue, tvAccrued, tvTodayBooking, tvTodayReservation;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_owner_spot);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_my_spots, container, false);
 
-        rvSpots = findViewById(R.id.rv_spots);
-        btnAddSpotLarge = findViewById(R.id.btn_add_spot_large);
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        repository = SpotRepository.getInstance();
 
-        // Setup RecyclerView
-        rvSpots.setLayoutManager(new LinearLayoutManager(this));
+        // Other's Value Record stats
+        tvActualValue = view.findViewById(R.id.tvActualValue);
+        tvAccrued = view.findViewById(R.id.tvAccrued);
+        tvTodayBooking = view.findViewById(R.id.tvTodayBooking);
+        tvTodayReservation = view.findViewById(R.id.tvTodayReservation);
 
-        // Initial Data
-        spotList = new ArrayList<>();
-        spotList.add(new ParkingSpot("1", "City Center", "Downtown, NY", "$5/hr"));
-        spotList.add(new ParkingSpot("2", "Mall Parking", "Near Central Mall", "$3/hr"));
+        tvActualValue.setText("45");
+        tvAccrued.setText("2 late");
+        tvTodayBooking.setText("214");
+        tvTodayReservation.setText("10");
 
-        // Adapter
-        adapter = new ParkingSpotAdapter(this, spotList);
-        rvSpots.setAdapter(adapter);
+        // RecyclerView for spots
+        recyclerView = view.findViewById(R.id.recyclerSpots);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Add Button Logic
-        btnAddSpotLarge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(OwnerSpotActivity.this, AddParkingSpotActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
+        Button btnAddSpot = view.findViewById(R.id.btnAddParkingSpot);
+        btnAddSpot.setOnClickListener(v -> {
+            AddSpotFragment addFragment = new AddSpotFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, addFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
-        // Bottom Navigation (Icons)
-        bottomNav.setSelectedItemId(R.id.nav_spots);
+        loadSpots();
+
+        return view;
+    }
+
+    private void loadSpots() {
+        List<Spot> spots = repository.getAllSpots();
+        adapter = new SpotAdapter(spots, spot -> {
+            EditSpotFragment editFragment = EditSpotFragment.newInstance(spot.getId());
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, editFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            // Check for new spot
-            if (data.hasExtra("new_spot")) {
-                ParkingSpot newSpot = (ParkingSpot) data.getSerializableExtra("new_spot");
-                if (newSpot != null) {
-                    spotList.add(newSpot);
-                    adapter.notifyItemInserted(spotList.size() - 1);
-                    rvSpots.scrollToPosition(spotList.size() - 1);
-                }
-            } 
-            // Check for updated spot
-            else if (data.hasExtra("updated_spot")) {
-                ParkingSpot updatedSpot = (ParkingSpot) data.getSerializableExtra("updated_spot");
-                if (updatedSpot != null) {
-                    for (int i = 0; i < spotList.size(); i++) {
-                        if (spotList.get(i).getId().equals(updatedSpot.getId())) {
-                            spotList.set(i, updatedSpot);
-                            adapter.notifyItemChanged(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+    public void onResume() {
+        super.onResume();
+        loadSpots();
     }
 }

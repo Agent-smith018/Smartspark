@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Smartpark</string>
+    <string name="add_new_parking_spot">Add New Parking Spot</string>
+    <string name="spot_name_hint">Spot Name</string>
+    <string name="address_hint">Address</string>
+    <string name="total_spots_hint">Total Spots</string>
+    <string name="spot_type_label">Spot Type</string>
+    <string name="status_label">Status</string>
+    <string name="open_status">Open</string>
+    <string name="closed_status">Closed</string>
+    <string name="pricing_label">Pricing</string>
+    <string name="hourly_rate_hint">Hourly Rate (CAD)</string>
+    <string name="zero_value">0</string>
+    <string name="open_at_hint">Open At (HH:MM)</string>
+    <string name="close_at_hint">Close At (HH:MM)</string>
+    <string name="default_open_time">08:00</string>
+    <string name="default_close_time">22:00</string>
+    <string name="description_hint">Description (Optional)</string>
+    <string name="save_spot_button">Save Spot</string>
 </resources>
