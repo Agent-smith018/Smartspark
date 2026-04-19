@@ -1,66 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
 
-    <!-- Top Bar -->
-    <View
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/primary_blue"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="My Parking Spots"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_spots"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/btn_add_spot_large"/>
-
-    <!-- Add Button (Matching your image) -->
-    <Button
-        android:id="@+id/btn_add_spot_large"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="16dp"
-        android:backgroundTint="#66BB6A"
-        android:text="ADD Parking Spot"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:cornerRadius="30dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
-
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Other's Value Record Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other'sValueRecord"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome back, Marc"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView android:text="Actual Value" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvActualValue" android:text="45" />
+                        <TextView android:text="Accrued" android:layout_marginTop="8dp" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvAccrued" android:text="2 late" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Today's Booking"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/tvTodayBooking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="214" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Today's Reservation"
+                            android:layout_marginTop="8dp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/tvTodayReservation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="10" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- My Spots Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Spots"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Spots RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSpots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Add Parking Spot Button -->
+        <Button
+            android:id="@+id/btnAddParkingSpot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="ADD Parking Spot"
+            android:backgroundTint="@color/primary_blue" />
+
+    </LinearLayout>
+</ScrollView>

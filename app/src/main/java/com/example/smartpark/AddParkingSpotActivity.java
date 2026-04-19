@@ -1,86 +1,96 @@
 package com.example.smartpark;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 public class AddParkingSpotActivity extends AppCompatActivity {
 
-    private TextInputEditText etSpotName, etSpotAddress, etSpotPrice;
-    private Button btnSaveSpot;
-    private ProgressBar progressBar;
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
+    private EditText etSpotName, etAddress, etPrice;
+    private Button btnSave;
+    private TextView tvTitle;
+    private ParkingSpot existingSpot;
+    private boolean isEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_parking_spot);
 
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-
         etSpotName = findViewById(R.id.et_spot_name);
-        etSpotAddress = findViewById(R.id.et_spot_address);
-        etSpotPrice = findViewById(R.id.et_spot_price);
-        btnSaveSpot = findViewById(R.id.btn_save_spot);
-        progressBar = findViewById(R.id.save_progress);
+        etAddress = findViewById(R.id.et_address);
+        etPrice = findViewById(R.id.et_price);
+        btnSave = findViewById(R.id.btn_save);
+        tvTitle = findViewById(R.id.tv_title);
 
-        btnSaveSpot.setOnClickListener(v -> saveParkingSpot());
+        // Check if we are in Edit Mode
+        if (getIntent().hasExtra("spot")) {
+            existingSpot = (ParkingSpot) getIntent().getSerializableExtra("spot");
+            isEditMode = true;
+            setupEditMode();
+        }
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveSpot();
+            }
+        });
     }
 
-    private void saveParkingSpot() {
+    private void setupEditMode() {
+        tvTitle.setText("Edit Parking Spot");
+        btnSave.setText("Update Spot");
+        
+        if (existingSpot != null) {
+            etSpotName.setText(existingSpot.getName());
+            etAddress.setText(existingSpot.getAddress());
+            etPrice.setText(existingSpot.getPrice());
+        }
+    }
+
+    private void saveSpot() {
         String name = etSpotName.getText().toString().trim();
-        String address = etSpotAddress.getText().toString().trim();
-        String price = etSpotPrice.getText().toString().trim();
+        String address = etAddress.getText().toString().trim();
+        String price = etPrice.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name)) {
-            etSpotName.setError("Name is required");
+        if (name.isEmpty() || address.isEmpty() || price.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(address)) {
-            etSpotAddress.setError("Address is required");
-            return;
+        if (isEditMode) {
+            // Update existing object
+            existingSpot.setName(name);
+            existingSpot.setAddress(address);
+            existingSpot.setPrice(price);
+            
+            // Pass back the updated object to the previous activity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updated_spot", existingSpot);
+            setResult(RESULT_OK, resultIntent);
+            
+            Toast.makeText(this, "Spot updated successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            // Create a new object and send it back
+            String id = UUID.randomUUID().toString();
+            ParkingSpot newSpot = new ParkingSpot(id, name, address, price);
+            
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("new_spot", newSpot);
+            setResult(RESULT_OK, resultIntent);
+
+            Toast.makeText(this, "Spot added successfully", Toast.LENGTH_SHORT).show();
         }
-
-        if (TextUtils.isEmpty(price)) {
-            etSpotPrice.setError("Price is required");
-            return;
-        }
-
-        progressBar.setVisibility(View.VISIBLE);
-
-        String ownerId = mAuth.getCurrentUser().getUid();
-        Map<String, Object> spot = new HashMap<>();
-        spot.put("name", name);
-        spot.put("address", address);
-        spot.put("price", price);
-        spot.put("ownerId", ownerId);
-        spot.put("status", "available"); // Default status
-
-        db.collection("parking_spots")
-                .add(spot)
-                .addOnSuccessListener(documentReference -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(this, "Parking Spot Added Successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+        
+        finish();
     }
 }

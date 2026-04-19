@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Owner approval" android:textStyle="bold" android:textSize="22sp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Marc Dumont . 42 avg" android:textColor="@color/text_muted"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:padding="12dp" android:layout_marginTop="16dp" android:orientation="horizontal">
+            <TextView android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="AL" android:background="@drawable/bg_chip_green" android:textColor="@color/green_text"/>
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Marc Dumont" android:textStyle="bold" android:textSize="18sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="New owner account"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Driver since Jan 2025"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Submitted Details" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="16dp"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:padding="12dp" android:layout_marginTop="8dp" android:text='"Spot name: St-Henri Permit Outlet\nAddress: 36 Rue Peel, Montreal\nCapacity: 32 spots\nCovered: Yes\nDocument: View uploaded file\nMaps: View uploaded file"'/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ADMIN NOTE (OPTION)" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="16dp"/>
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_input" android:hint="Add a note before deciding ...." android:layout_marginTop="8dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp">
+            <Button android:id="@+id/btnReject" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="Reject" android:textAllCaps="false" android:background="@drawable/bg_primary_button" android:textColor="@color/white"/>
+            <Button android:id="@+id/btnApprove" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="6dp" android:text="Approve" android:textAllCaps="false" android:background="@drawable/bg_primary_button" android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
