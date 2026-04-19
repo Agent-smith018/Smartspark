@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="-40dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar">
 
         <!-- Default Content (Initial Dashboard) -->
@@ -73,21 +73,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Easily add and monitor your parking locations."
+                    android:text="Easily monitor your parking locations."
                     android:textColor="#757575"
                     android:textSize="14sp" />
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/btn_add_spot_owner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="ADD NEW PARKING SPOT"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    app:backgroundTint="@color/primary_blue"
-                    app:icon="@android:drawable/ic_input_add"
-                    app:iconTint="@color/white" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_logout_owner"
@@ -101,15 +89,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </FrameLayout>
-
-    <!-- Bottom Navigation Bar -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:elevation="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/owner_bottom_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

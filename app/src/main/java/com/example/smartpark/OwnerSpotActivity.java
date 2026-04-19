@@ -1,77 +1,135 @@
 package com.example.smartpark;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import androidx.fragment.app.Fragment;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.smartpark.R;
-import com.example.smartpark.adapters.SpotAdapter;
-import com.parking.mr.data.Spot;
-import com.parking.manager.data.SpotRepository;
-import java.util.List;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
 
 public class OwnerSpotActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private SpotAdapter adapter;
-    private SpotRepository repository;
-    private TextView tvActualValue, tvAccrued, tvTodayBooking, tvTodayReservation;
+    private static final int REQUEST_CODE = 1;
+    private RecyclerView rvSpots;
+    private ArrayList<ParkingSpot> spotList;
+    private ParkingSpotAdapter adapter;
+    private FirebaseFirestore db;
+    private ListenerRegistration spotsListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_spots, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_owner_spot);
 
-        repository = SpotRepository.getInstance();
+        db = FirebaseFirestore.getInstance();
+        enforceOwnerAccess();
 
-        // Other's Value Record stats
-        tvActualValue = view.findViewById(R.id.tvActualValue);
-        tvAccrued = view.findViewById(R.id.tvAccrued);
-        tvTodayBooking = view.findViewById(R.id.tvTodayBooking);
-        tvTodayReservation = view.findViewById(R.id.tvTodayReservation);
+        android.view.View btnBack = findViewById(R.id.btn_back);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
-        tvActualValue.setText("45");
-        tvAccrued.setText("2 late");
-        tvTodayBooking.setText("214");
-        tvTodayReservation.setText("10");
+        rvSpots = findViewById(R.id.rv_spots);
 
-        // RecyclerView for spots
-        recyclerView = view.findViewById(R.id.recyclerSpots);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Setup RecyclerView
+        rvSpots.setLayoutManager(new LinearLayoutManager(this));
 
-        Button btnAddSpot = view.findViewById(R.id.btnAddParkingSpot);
-        btnAddSpot.setOnClickListener(v -> {
-            AddSpotFragment addFragment = new AddSpotFragment();
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, addFragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
+        // Initial Data
+        spotList = new ArrayList<>();
+        adapter = new ParkingSpotAdapter(this, spotList);
+        rvSpots.setAdapter(adapter);
+        
+        loadMySpots();
+    }
+    
+    private void loadMySpots() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        
+        if (spotsListener != null) {
+            spotsListener.remove();
+        }
+        
+        spotsListener = db.collection("parking_spots")
+                .whereEqualTo("ownerId", user.getUid())
+                .addSnapshotListener((value, error) -> {
+                    if (error != null || value == null) {
+                        return;
+                    }
+                    
+                    spotList.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String id = doc.getId();
+                        String name = doc.getString("name");
+                        String address = doc.getString("address");
+                        String priceRaw = doc.getString("price");
+                        
+                        String price = "";
+                        if (priceRaw != null && !priceRaw.isEmpty()) {
+                            price = "$" + priceRaw + "/hr";
+                        }
+                        
+                        String status = doc.getString("status");
+                        if (status == null) status = "available";
+                        
+                        ParkingSpot spot = new ParkingSpot(id, name, address, price, status);
+                        spot.setDescription(doc.getString("description"));
+                        spot.setWorkingHours(doc.getString("workingHours"));
+                        spot.setType(doc.getString("type"));
+                        Long capObj = doc.getLong("capacity");
+                        spot.setCapacity(capObj != null ? capObj.intValue() : 1);
+                        Double latObj = doc.getDouble("latitude");
+                        Double lngObj = doc.getDouble("longitude");
+                        spot.setLatitude(latObj != null ? latObj : 0.0);
+                        spot.setLongitude(lngObj != null ? lngObj : 0.0);
+                        
+                        // Fix for raw price value when editing edit
+                        spot.setPrice(priceRaw != null ? priceRaw : "");
 
-        loadSpots();
-
-        return view;
+                        spotList.add(spot);
+                    }
+                    adapter.notifyDataSetChanged();
+                });
     }
 
-    private void loadSpots() {
-        List<Spot> spots = repository.getAllSpots();
-        adapter = new SpotAdapter(spots, spot -> {
-            EditSpotFragment editFragment = EditSpotFragment.newInstance(spot.getId());
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, editFragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-        recyclerView.setAdapter(adapter);
+    private void enforceOwnerAccess() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(OwnerSpotActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        db.collection("users").document(currentUser.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"owner".equalsIgnoreCase(role)) {
+                        startActivity(new Intent(OwnerSpotActivity.this, HomeActivity.class));
+                        finish();
+                    }
+                });
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        loadSpots();
+    protected void onDestroy() {
+        super.onDestroy();
+        if (spotsListener != null) {
+            spotsListener.remove();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Leaving this in case some other activity passes back data, though the snapshot listener handles updates natively.
     }
 }

@@ -11,21 +11,64 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smartpark">
+
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddParkingSpotActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OwnerSpotActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".OwnerDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerSpotActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerHistoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerRequestsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminReportsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DriverFavoritesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AddParkingSpotActivity"
+            android:exported="false" />
+            
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

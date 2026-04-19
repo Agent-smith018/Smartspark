@@ -139,18 +139,26 @@ public class SignupActivity extends AppCompatActivity {
         user.put("email", email);
         user.put("role", role);
 
-        // We trigger the save, but we also navigate immediately to provide a fast experience.
-        db.collection("users").document(userId).set(user);
-        
-        Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-        progressBar.setVisibility(View.GONE);
-        navigateToHome(role);
+        db.collection("users").document(userId).set(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    navigateToHome(role);
+                })
+                .addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(this, "Critical: Database write failed. Ensure your Firestore Security Rules allow writes! Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    // We still navigate them so they aren't stuck, but they will be warned.
+                    navigateToHome(role);
+                });
     }
 
     private void navigateToHome(String role) {
         Intent intent;
         if ("owner".equalsIgnoreCase(role)) {
-            intent = new Intent(SignupActivity.this, OwnerHomeActivity.class);
+            intent = new Intent(SignupActivity.this, OwnerDashboardActivity.class);
+        } else if ("admin".equalsIgnoreCase(role)) {
+            intent = new Intent(SignupActivity.this, AdminDashboardActivity.class);
         } else {
             intent = new Intent(SignupActivity.this, HomeActivity.class);
         }
