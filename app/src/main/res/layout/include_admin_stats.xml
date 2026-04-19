@@ -1,27 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="16dp">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/bg_stat_box" android:padding="12dp" android:layout_marginEnd="6dp" android:orientation="vertical">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Users"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,284" android:textStyle="bold" android:textSize="20sp"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+24 this week" android:textColor="@color/green_text"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/bg_stat_box" android:padding="12dp" android:layout_marginStart="6dp" android:orientation="vertical">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Spots"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="87" android:textStyle="bold" android:textSize="20sp"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12 critical" android:textColor="@color/green_text"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp">
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/bg_stat_box" android:padding="12dp" android:layout_marginEnd="6dp" android:orientation="vertical">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending Owners"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6" android:textStyle="bold" android:textSize="20sp"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Awaiting review" android:textColor="@color/green_text"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/bg_stat_box" android:padding="12dp" android:layout_marginStart="6dp" android:orientation="vertical">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Open Reports"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="14" android:textStyle="bold" android:textSize="20sp"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3 critical" android:textColor="@color/red_text"/>
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminStatusInclude">
+
+</androidx.constraintlayout.widget.ConstraintLayout>
