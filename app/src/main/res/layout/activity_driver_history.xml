@@ -3,45 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="#F5F7FB">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="64dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingTop="24dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Favorite Parking Spots"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary_dark" />
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/btn_back_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Back"
-            android:textAllCaps="false" />
+            <ImageButton
+                android:id="@+id/btn_back_profile_history"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_nav_profile"
+                app:tint="@color/primary_blue"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parking History"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_empty_favorites"
+            android:id="@+id/tv_empty_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="No favorites yet"
-            android:textColor="#5F6368" />
+            android:layout_marginTop="24dp"
+            android:text="No parking history found."
+            android:textAlignment="center"
+            android:textColor="#5F6368"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_favorites"
+            android:id="@+id/rv_history"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:clipToPadding="false"
             android:paddingBottom="16dp" />
 

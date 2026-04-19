@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
@@ -20,13 +22,21 @@ public class OwnerSpotActivity extends AppCompatActivity {
     private RecyclerView rvSpots;
     private ArrayList<ParkingSpot> spotList;
     private ParkingSpotAdapter adapter;
+    private FirebaseFirestore db;
+    private ListenerRegistration spotsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_spot);
 
+        db = FirebaseFirestore.getInstance();
         enforceOwnerAccess();
+
+        android.view.View btnBack = findViewById(R.id.btn_back);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         rvSpots = findViewById(R.id.rv_spots);
 
@@ -35,12 +45,60 @@ public class OwnerSpotActivity extends AppCompatActivity {
 
         // Initial Data
         spotList = new ArrayList<>();
-        spotList.add(new ParkingSpot("1", "City Center", "Downtown, NY", "$5/hr"));
-        spotList.add(new ParkingSpot("2", "Mall Parking", "Near Central Mall", "$3/hr"));
-
-        // Adapter
         adapter = new ParkingSpotAdapter(this, spotList);
         rvSpots.setAdapter(adapter);
+        
+        loadMySpots();
+    }
+    
+    private void loadMySpots() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        
+        if (spotsListener != null) {
+            spotsListener.remove();
+        }
+        
+        spotsListener = db.collection("parking_spots")
+                .whereEqualTo("ownerId", user.getUid())
+                .addSnapshotListener((value, error) -> {
+                    if (error != null || value == null) {
+                        return;
+                    }
+                    
+                    spotList.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String id = doc.getId();
+                        String name = doc.getString("name");
+                        String address = doc.getString("address");
+                        String priceRaw = doc.getString("price");
+                        
+                        String price = "";
+                        if (priceRaw != null && !priceRaw.isEmpty()) {
+                            price = "$" + priceRaw + "/hr";
+                        }
+                        
+                        String status = doc.getString("status");
+                        if (status == null) status = "available";
+                        
+                        ParkingSpot spot = new ParkingSpot(id, name, address, price, status);
+                        spot.setDescription(doc.getString("description"));
+                        spot.setWorkingHours(doc.getString("workingHours"));
+                        spot.setType(doc.getString("type"));
+                        Long capObj = doc.getLong("capacity");
+                        spot.setCapacity(capObj != null ? capObj.intValue() : 1);
+                        Double latObj = doc.getDouble("latitude");
+                        Double lngObj = doc.getDouble("longitude");
+                        spot.setLatitude(latObj != null ? latObj : 0.0);
+                        spot.setLongitude(lngObj != null ? lngObj : 0.0);
+                        
+                        // Fix for raw price value when editing edit
+                        spot.setPrice(priceRaw != null ? priceRaw : "");
+
+                        spotList.add(spot);
+                    }
+                    adapter.notifyDataSetChanged();
+                });
     }
 
     private void enforceOwnerAccess() {
@@ -51,7 +109,7 @@ public class OwnerSpotActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid()).get()
+        db.collection("users").document(currentUser.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     String role = documentSnapshot.getString("role");
                     if (!"owner".equalsIgnoreCase(role)) {
@@ -62,32 +120,16 @@ public class OwnerSpotActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (spotsListener != null) {
+            spotsListener.remove();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            // Check for new spot
-            if (data.hasExtra("new_spot")) {
-                ParkingSpot newSpot = (ParkingSpot) data.getSerializableExtra("new_spot");
-                if (newSpot != null) {
-                    spotList.add(newSpot);
-                    adapter.notifyItemInserted(spotList.size() - 1);
-                    rvSpots.scrollToPosition(spotList.size() - 1);
-                }
-            } 
-            // Check for updated spot
-            else if (data.hasExtra("updated_spot")) {
-                ParkingSpot updatedSpot = (ParkingSpot) data.getSerializableExtra("updated_spot");
-                if (updatedSpot != null) {
-                    for (int i = 0; i < spotList.size(); i++) {
-                        if (spotList.get(i).getId().equals(updatedSpot.getId())) {
-                            spotList.set(i, updatedSpot);
-                            adapter.notifyItemChanged(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        // Leaving this in case some other activity passes back data, though the snapshot listener handles updates natively.
     }
 }

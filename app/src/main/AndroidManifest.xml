@@ -52,6 +52,18 @@
             android:exported="false" />
 
         <activity
+            android:name=".OwnerSpotActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerHistoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerRequestsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".AdminDashboardActivity"
             android:exported="false" />
 
@@ -69,6 +81,10 @@
 
         <activity
             android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".OwnerProfileActivity"
             android:exported="false" />
 
     </application>

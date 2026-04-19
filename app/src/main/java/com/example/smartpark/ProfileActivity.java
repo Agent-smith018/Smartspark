@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button btnUpdateName;
     private Button btnLogout;
     private Button btnViewFavorites;
+    private Button btnViewHistory;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -47,6 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
         btnUpdateName = findViewById(R.id.btn_update_name);
         btnLogout = findViewById(R.id.btn_logout);
         btnViewFavorites = findViewById(R.id.btn_view_favorites);
+        btnViewHistory = findViewById(R.id.btn_view_history);
+        BottomNavigationView bottomNavDriver = findViewById(R.id.bottom_nav_driver);
 
         loadProfileData();
         loadSpotStats();
@@ -55,6 +59,29 @@ public class ProfileActivity extends AppCompatActivity {
         btnLogout.setOnClickListener(v -> logout());
         btnViewFavorites.setOnClickListener(v ->
             startActivity(new Intent(ProfileActivity.this, DriverFavoritesActivity.class)));
+        btnViewHistory.setOnClickListener(v ->
+            startActivity(new Intent(ProfileActivity.this, DriverHistoryActivity.class)));
+
+        if (bottomNavDriver != null) {
+            bottomNavDriver.setSelectedItemId(R.id.nav_driver_profile);
+            bottomNavDriver.setOnItemSelectedListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.nav_driver_profile) {
+                    return true;
+                }
+                if (itemId == R.id.nav_driver_home) {
+                    Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    return true;
+                }
+                if (itemId == R.id.nav_driver_favorites) {
+                    startActivity(new Intent(ProfileActivity.this, DriverFavoritesActivity.class));
+                    return true;
+                }
+                return false;
+            });
+        }
     }
 
     private void loadProfileData() {

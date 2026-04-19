@@ -35,7 +35,7 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
-    private TextInputEditText etSpotName, etSpotAddress, etSpotPrice;
+    private TextInputEditText etSpotName, etSpotAddress, etSpotPrice, etSpotCapacity, etSpotDescription, etSpotWorkingHours;
     private AutoCompleteTextView actvSpotStatus;
         private AutoCompleteTextView actvParkingType;
     private TextView tvSelectedLocation;
@@ -45,6 +45,9 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
     private FirebaseAuth mAuth;
     private GoogleMap mMap;
     private LatLng selectedLatLng;
+    private boolean isEditMode = false;
+    private String editSpotId;
+    private ParkingSpot editSpotData;
 
     private static final LatLng MONTREAL = new LatLng(45.5017, -73.5673);
 
@@ -55,11 +58,21 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        android.view.View btnBack = findViewById(R.id.btn_back);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+
         enforceOwnerAccess();
 
         etSpotName = findViewById(R.id.et_spot_name);
         etSpotAddress = findViewById(R.id.et_spot_address);
         etSpotPrice = findViewById(R.id.et_spot_price);
+        etSpotCapacity = findViewById(R.id.et_spot_capacity);
+        etSpotDescription = findViewById(R.id.et_spot_description);
+        etSpotWorkingHours = findViewById(R.id.et_spot_working_hours);
         actvSpotStatus = findViewById(R.id.actv_spot_status);
         actvParkingType = findViewById(R.id.actv_parking_type);
         tvSelectedLocation = findViewById(R.id.tv_selected_location);
@@ -68,6 +81,45 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
 
         setupStatusDropdown();
         setupTypeDropdown();
+        
+        editSpotData = (ParkingSpot) getIntent().getSerializableExtra("spot");
+        if (editSpotData != null) {
+            isEditMode = true;
+            editSpotId = editSpotData.getId();
+            
+            etSpotName.setText(editSpotData.getName() != null ? editSpotData.getName() : "");
+            etSpotAddress.setText(editSpotData.getAddress() != null ? editSpotData.getAddress() : "");
+            etSpotPrice.setText(editSpotData.getPrice() != null ? editSpotData.getPrice().replace("$","").replace("/hr","").trim() : "");
+            etSpotCapacity.setText(String.valueOf(editSpotData.getCapacity()));
+            etSpotDescription.setText(editSpotData.getDescription() != null ? editSpotData.getDescription() : "");
+            etSpotWorkingHours.setText(editSpotData.getWorkingHours() != null ? editSpotData.getWorkingHours() : "");
+            
+            if (editSpotData.getStatus() != null) {
+                // Capitalize first letter logic for display is handled by dropdowns naturally but let's set raw
+                actvSpotStatus.setText(editSpotData.getStatus(), false);
+            }
+            if (editSpotData.getType() != null) {
+                // Ensure proper capitalization for display
+                String typeStr = editSpotData.getType();
+                if (typeStr.equalsIgnoreCase("free")) typeStr = "Free";
+                else if (typeStr.equalsIgnoreCase("paid")) typeStr = "Paid";
+                else if (typeStr.equalsIgnoreCase("street parking")) typeStr = "Street Parking";
+                else if (typeStr.equalsIgnoreCase("private lot")) typeStr = "Private Lot";
+                actvParkingType.setText(typeStr, false);
+            }
+            
+            if (editSpotData.getDescription() != null) {
+                etSpotDescription.setText(editSpotData.getDescription());
+            }
+            if (editSpotData.getWorkingHours() != null) {
+                etSpotWorkingHours.setText(editSpotData.getWorkingHours());
+            }
+            
+            selectedLatLng = new LatLng(editSpotData.getLatitude(), editSpotData.getLongitude());
+            
+            btnSaveSpot.setText("UPDATE PARKING SPOT");
+        }
+
         setupMap();
 
         btnSaveSpot.setOnClickListener(v -> saveParkingSpot());
@@ -123,7 +175,19 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MONTREAL, 12f));
+        
+        if (isEditMode && selectedLatLng != null && selectedLatLng.latitude != 0.0) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLatLng, 15f));
+            mMap.addMarker(new MarkerOptions().position(selectedLatLng).title("Selected Spot"));
+            tvSelectedLocation.setText(getString(
+                    R.string.selected_location_format,
+                    selectedLatLng.latitude,
+                    selectedLatLng.longitude
+            ));
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MONTREAL, 12f));
+        }
+        
         enableMyLocation();
 
         mMap.setOnMapClickListener(latLng -> {
@@ -172,6 +236,9 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         String name = etSpotName.getText() != null ? etSpotName.getText().toString().trim() : "";
         String address = etSpotAddress.getText() != null ? etSpotAddress.getText().toString().trim() : "";
         String price = etSpotPrice.getText() != null ? etSpotPrice.getText().toString().trim() : "";
+        String capacityStr = etSpotCapacity.getText() != null ? etSpotCapacity.getText().toString().trim() : "";
+        String description = etSpotDescription.getText() != null ? etSpotDescription.getText().toString().trim() : "";
+        String workingHours = etSpotWorkingHours.getText() != null ? etSpotWorkingHours.getText().toString().trim() : "";
         String status = actvSpotStatus.getText() != null ? actvSpotStatus.getText().toString().trim() : "";
         String type = actvParkingType.getText() != null ? actvParkingType.getText().toString().trim() : "";
 
@@ -187,6 +254,19 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
 
         if (TextUtils.isEmpty(price)) {
             etSpotPrice.setError("Price is required");
+            return;
+        }
+
+        if (TextUtils.isEmpty(capacityStr)) {
+            etSpotCapacity.setError("Capacity is required");
+            return;
+        }
+
+        int capacity = 1;
+        try {
+            capacity = Integer.parseInt(capacityStr);
+        } catch (NumberFormatException e) {
+            etSpotCapacity.setError("Invalid capacity");
             return;
         }
 
@@ -217,23 +297,58 @@ public class AddParkingSpotActivity extends AppCompatActivity implements OnMapRe
         spot.put("name", name);
         spot.put("address", address);
         spot.put("price", price);
+        spot.put("capacity", capacity);
+        spot.put("description", description);
+        spot.put("workingHours", workingHours);
         spot.put("ownerId", ownerId);
         spot.put("latitude", selectedLatLng.latitude);
         spot.put("longitude", selectedLatLng.longitude);
         spot.put("status", status.toLowerCase());
         spot.put("type", type.toLowerCase());
-        spot.put("addedAt", FieldValue.serverTimestamp());
-
-        db.collection("parking_spots")
-                .add(spot)
-                .addOnSuccessListener(documentReference -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(this, "Parking Spot Added Successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+        
+        if (isEditMode) {
+            spot.put("updatedAt", FieldValue.serverTimestamp());
+            db.collection("parking_spots").document(editSpotId)
+                    .update(spot)
+                    .addOnSuccessListener(aVoid -> {
+                        if (editSpotData != null && !editSpotData.getStatus().equalsIgnoreCase(status)) {
+                            java.util.Map<String, Object> history = new java.util.HashMap<>();
+                            history.put("spotId", editSpotId);
+                            history.put("spotName", name);
+                            history.put("ownerId", ownerId);
+                            history.put("status", status.toLowerCase());
+                            history.put("timestamp", FieldValue.serverTimestamp());
+                            db.collection("spot_history").add(history);
+                        }
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(this, "Parking Spot Updated Successfully!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(this, "Error updating: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            spot.put("addedAt", FieldValue.serverTimestamp());
+            db.collection("parking_spots")
+                    .add(spot)
+                    .addOnSuccessListener(documentReference -> {
+                        java.util.Map<String, Object> history = new java.util.HashMap<>();
+                        history.put("spotId", documentReference.getId());
+                        history.put("spotName", name);
+                        history.put("ownerId", ownerId);
+                        history.put("status", status.toLowerCase());
+                        history.put("timestamp", FieldValue.serverTimestamp());
+                        db.collection("spot_history").add(history);
+                        
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(this, "Parking Spot Added Successfully!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        }
     }
 }

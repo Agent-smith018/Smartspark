@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         progressBar.setVisibility(View.VISIBLE);
+        btnLogin.setEnabled(false);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
@@ -124,10 +125,12 @@ public class MainActivity extends AppCompatActivity {
                             checkUserRoleAndNavigate(user.getUid());
                         } else {
                             progressBar.setVisibility(View.GONE);
+                            btnLogin.setEnabled(true);
                             Toast.makeText(MainActivity.this, "Unable to get user information", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         progressBar.setVisibility(View.GONE);
+                        btnLogin.setEnabled(true);
                         handleLoginError(task.getException());
                     }
                 });
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkUserRoleAndNavigate(String uid) {
         progressBar.setVisibility(View.VISIBLE);
+        btnLogin.setEnabled(false);
         db.collection("users").document(uid).get().addOnCompleteListener(task -> {
             progressBar.setVisibility(View.GONE);
             if (task.isSuccessful() && task.getResult() != null) {
@@ -148,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             } else {
+                btnLogin.setEnabled(true);
                 Toast.makeText(MainActivity.this, "Error fetching user role", Toast.LENGTH_SHORT).show();
                 navigateByRole(null);
                 finish();

@@ -163,6 +163,26 @@
                             android:textColor="#5F6368"
                             android:textSize="12sp" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_max_price_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Max price: $100"
+                        android:textColor="#5F6368"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_max_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:value="100"
+                        android:valueFrom="0"
+                        android:valueTo="100"
+                        android:stepSize="1" />
                 </LinearLayout>
 
                 <!-- Filter Toggle Button -->
@@ -189,7 +209,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="90dp"
             android:contentDescription="My Location"
             app:backgroundTint="@color/white"
             app:fabSize="mini"
@@ -205,7 +225,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="90dp"
             android:text="Logout"
             android:textColor="#757575"
             android:textSize="12sp"
@@ -219,6 +239,7 @@
         android:id="@+id/bottom_sheet_list"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        android:layout_marginBottom="92dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="60dp"
         app:cardCornerRadius="24dp"
@@ -226,6 +247,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
+            android:id="@+id/layout_list_sheet_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -262,8 +284,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:layout_marginBottom="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="96dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="190dp"
         app:cardCornerRadius="24dp"
@@ -271,6 +293,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
+            android:id="@+id/layout_detail_sheet_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
@@ -317,6 +340,15 @@
                 android:layout_marginTop="8dp"
                 android:text="Status: -"
                 android:textColor="#757575" />
+                
+            <TextView
+                android:id="@+id/tv_detail_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Price: -"
+                android:textColor="#1967D2"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_detail_added_time"
@@ -342,6 +374,62 @@
                 android:text="User ID: -"
                 android:textColor="#757575" />
 
+            <TextView
+                android:id="@+id/tv_timer_countdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Timer: Not set"
+                android:textColor="@color/primary_blue"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_timer_30m"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="30 min"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_timer_1h"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="1 hour"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_timer_custom"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="Custom"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_timer_cancel"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel Timer"
+                android:textColor="#B3261E"
+                android:visibility="gone" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_navigate"
                 android:layout_width="match_parent"
@@ -350,6 +438,17 @@
                 android:text="Navigate"
                 app:backgroundTint="@color/primary_blue"
                 app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_request_parking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Request Private Parking"
+                app:backgroundTint="#F4B400"
+                app:cornerRadius="12dp"
+                android:textColor="@color/white"
+                android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_report_spot"
@@ -370,5 +469,18 @@
                 android:textColor="#757575" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:elevation="24dp"
+        android:translationZ="24dp"
+        app:itemIconTint="@color/primary_blue"
+        app:itemTextColor="@color/primary_blue"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/driver_bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
