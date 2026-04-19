@@ -1,15 +1,12 @@
 package com.example.smartpark;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.smartpark.manager.fragments.AdminPanelFragment;
-import com.example.smartpark.fragments.MySpotsFragment;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -17,40 +14,19 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
 
-            BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
-            bottomNav.setOnNavigationItemSelectedListener(navListener);
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
-            if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new MySpotsFragment())
-                        .commit();
-            }
-        }
-
-        private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment selectedFragment = null;
-
-                        if (item.getItemId() == R.id.nav_spots) {
-                            selectedFragment = new MySpotsFragment();
-                        } else if (item.getItemId() == R.id.nav_admin) {
-                            selectedFragment = new AdminPanelFragment();
-                        }
-
-                        if (selectedFragment != null) {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container, selectedFragment)
-                                    .commit();
-                        }
-                        return true;
-                    }
-                };
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 }

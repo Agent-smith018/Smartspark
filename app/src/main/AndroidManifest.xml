@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Permissions for Google Maps and Location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,47 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smartpark">
         <activity
-            android:name=".OwnerStatsActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".OwnerStatsInclude"
+            android:name=".AddParkingSpotActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminStatusInclude"
-            android:exported="false" />
-        <activity
-            android:name=".SpotOversightActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ReportsFlagsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OwnerSpotListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OwnerApprovalActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminUsersActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminDashboardActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditParkingSpotActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditSpotActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Owner_SpotActivity"
-            android:exported="false" /> <!-- Google Maps API Key - REQUIRED for the app not to crash -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAQLPxYBjoGlFGvSzD6g6HqqtHVi5DTs0M" />
-
-        <activity
-            android:name=".SplashActivity"
+            android:name=".OwnerSpotActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,21 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignupActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OwnerHomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddParkingSpotActivity"
-            android:exported="false" />
     </application>
 
 </manifest>
