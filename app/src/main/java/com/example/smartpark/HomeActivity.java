@@ -294,7 +294,21 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
 
-        applyNavbarSafeSpacing();
+        // Initialize Zoom Controls
+        com.google.android.material.button.MaterialButton btnZoomIn = findViewById(R.id.btnZoomIn);
+        com.google.android.material.button.MaterialButton btnZoomOut = findViewById(R.id.btnZoomOut);
+        
+        if (btnZoomIn != null) {
+            btnZoomIn.setOnClickListener(v -> {
+                if (mMap != null) mMap.animateCamera(CameraUpdateFactory.zoomIn());
+            });
+        }
+        
+        if (btnZoomOut != null) {
+            btnZoomOut.setOnClickListener(v -> {
+                if (mMap != null) mMap.animateCamera(CameraUpdateFactory.zoomOut());
+            });
+        }
     }
 
     private void enforceDriverAccess() {
