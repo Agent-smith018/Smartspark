@@ -1027,8 +1027,17 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             int safeBottom = navHeight + insetBottom + dpToPx(8);
 
+            int detailState = bottomSheetBehavior.getState();
             updateBottomMargin(detailSheetCard, safeBottom);
+            if (detailState == BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+
+            int listState = listSheetBehavior.getState();
             updateBottomMargin(listSheetCard, safeBottom);
+            if (listState == BottomSheetBehavior.STATE_HIDDEN) {
+                listSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
         };
 
         root.post(applySpacing);
