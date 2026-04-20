@@ -1,193 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:baselineAligned="false">
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
 
-        <!-- Title -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_grey"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:layout_marginEnd="12dp" />
+
         <TextView
-            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_new_parking_spot"
-            android:textSize="20sp"
+            android:text="Add new Spot"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#222222" />
+    </LinearLayout>
 
-        <!-- Spot Name -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/spot_name_hint">
-            <EditText
-                android:id="@+id/et_spot_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:autofillHints="name"
-                android:importantForAutofill="auto" />
-        </com.google.android.material.textfield.TextInputLayout>
+    <!-- Form -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <!-- Address -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/address_hint">
-            <EditText
-                android:id="@+id/et_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPostalAddress"
-                android:autofillHints="postal-address"
-                android:importantForAutofill="auto" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Total Spots -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/total_spots_hint">
-            <EditText
-                android:id="@+id/et_total_spots"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:autofillHints="number"
-                android:importantForAutofill="auto" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Spot Type Spinner -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/spot_type_label"
-            android:layout_marginTop="8dp" />
-        <Spinner
-            android:id="@+id/spinner_spot_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <!-- Status RadioGroup -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/status_label"
-            android:layout_marginTop="8dp" />
-        <RadioGroup
-            android:id="@+id/rg_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/radio_open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/open_status"
-                android:checked="true" />
-            <RadioButton
-                android:id="@+id/radio_closed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/closed_status" />
-        </RadioGroup>
-
-        <!-- Pricing Spinner -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pricing_label"
-            android:layout_marginTop="8dp" />
-        <Spinner
-            android:id="@+id/spinner_pricing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <!-- Hourly Rate (only visible/editable when Paid selected) -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hourly_rate_hint">
-            <EditText
-                android:id="@+id/et_hourly_rate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:enabled="false"
-                android:text="@string/zero_value"
-                android:autofillHints="price"
-                android:importantForAutofill="auto" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Operating Hours Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <!-- Spot Name -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:hint="@string/open_at_hint">
-                <EditText
-                    android:id="@+id/et_open_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_open_time"
-                    android:inputType="time"
-                    android:autofillHints="time"
-                    android:importantForAutofill="auto" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:text="Spot Name"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:hint="@string/close_at_hint">
-                <EditText
-                    android:id="@+id/et_close_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_close_time"
-                    android:inputType="time"
-                    android:autofillHints="time"
-                    android:importantForAutofill="auto" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Description -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/description_hint">
             <EditText
-                android:id="@+id/et_description"
+                android:id="@+id/etSpotName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Spot C - Rue Sherbrooke"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Address -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ADDRESS"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etAddress"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Enter full address..."
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Total Spot + Spot Type Row -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="3"
-                android:inputType="textMultiLine"
-                android:autofillHints="description"
-                android:importantForAutofill="auto" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
 
-        <!-- Save Button -->
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Add Spot"
-            android:backgroundTint="@color/primary_blue" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
 
-    </LinearLayout>
-</ScrollView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL SPOT"
+                        android:textSize="12sp"
+                        android:textColor="#888888"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etTotalSpots"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:hint="24"
+                        android:inputType="number"
+                        android:background="@drawable/bg_edittext"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SPOT TYPE"
+                        android:textSize="12sp"
+                        android:textColor="#888888"
+                        android:layout_marginBottom="4dp" />
+
+                    <Spinner
+                        android:id="@+id/spinnerSpotType"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_edittext"
+                        android:paddingStart="12dp"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Status -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STATUS"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnStatusOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Open"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_green"
+                    android:layout_marginEnd="6dp"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnStatusClosed"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Closed"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_grey"
+                    android:layout_marginEnd="6dp"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnStatusOccupied"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Occupied"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_grey"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Pricing -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PRICING"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnPricingFree"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Free"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_green"
+                    android:layout_marginEnd="8dp"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnPricingPaid"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Paid"
+                    android:textColor="#222222"
+                    android:background="@drawable/bg_button_outline"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Operating Hours -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OPERATING HOURS"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <EditText
+                    android:id="@+id/etOpenTime"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="08:00"
+                    android:background="@drawable/bg_edittext"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp"
+                    android:inputType="time" />
+
+                <EditText
+                    android:id="@+id/etCloseTime"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="22:00"
+                    android:background="@drawable/bg_edittext"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textSize="14sp"
+                    android:inputType="time" />
+            </LinearLayout>
+
+            <!-- Add Spot Button -->
+            <Button
+                android:id="@+id/btnAddSpot"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="ADD SPOT"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_green"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

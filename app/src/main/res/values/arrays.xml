@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spot_types">
         <item>Standard</item>
@@ -5,6 +6,7 @@
         <item>Handicap</item>
         <item>EV Charging</item>
     </string-array>
+
     <string-array name="pricing_types">
         <item>Free</item>
         <item>Paid</item>

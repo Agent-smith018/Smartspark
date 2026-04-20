@@ -42,7 +42,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
-    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database)
 
     // Google Maps & Location
     implementation(libs.play.services.maps)

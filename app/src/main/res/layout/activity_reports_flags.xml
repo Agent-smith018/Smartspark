@@ -1,14 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Reports and flags" android:textStyle="bold" android:textSize="22sp"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3 critical" android:padding="8dp" android:background="@" android:textColor="@color/red_text"/>
-        </LinearLayout>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="14 open . 3 critical" android:textColor="@color/black"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CRITICAL" android:textStyle="bold" android:textSize="20sp" android:layout_marginTop="16dp"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reports &amp; flags"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#222222" />
+
+        <!-- Critical Badge -->
+        <TextView
+            android:id="@+id/tvCriticalCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 critical"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_badge_red"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvReports" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:paddingStart="16dp" android:paddingEnd="16dp"/>
-    <com.google.android.material.bottomnavigation.BottomNavigationView android:id="@+id/bottomAdmin" android:layout_width="match_parent" android:layout_height="wrap_content" app:menu="@menu/menu_admin_bottom"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Critical Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CRITICAL"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#F44336"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Critical Reports List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCriticalReports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="16dp" />
+
+            <!-- All Reports Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALL REPORTS"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#222222"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAllReports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
+
+        <LinearLayout android:id="@+id/navOverview" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_grid" android:contentDescription="Overview"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Overview" android:textSize="10sp" android:textColor="#888888"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/navUsers" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_people" android:contentDescription="Users"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Users" android:textSize="10sp" android:textColor="#888888"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/navSpots" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_home" android:contentDescription="Spots"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Spots" android:textSize="10sp" android:textColor="#888888"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/navReports" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_flag" android:contentDescription="Reports"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Reports" android:textSize="10sp" android:textColor="#1565C0"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Custom app colors -->
+    <color name="primary_color">#2E7D32</color>      <!-- Green for parking theme -->
+    <color name="primary_dark">#1B5E20</color>
+    <color name="accent_color">#FFC107</color>
+    <color name="background_color">#F5F5F5</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="available_green">#4CAF50</color>
+    <color name="occupied_red">#F44336</color>
+    <color name="warning_yellow">#FFEB3B</color>
+    <color name="critical_red">#D32F2F</color>
+
+    <!-- Splash Gradient Colors -->
+    <color name="splash_start">#0628E6</color>
+    <color name="splash_mid">#3F51B5</color>
+    <color name="splash_end">#1A237E</color>
+
+    <!-- Primary Blue -->
     <color name="primary_blue">#0628E6</color>
+    <color name="primary_blue_light">#E8EAF6</color>
+
+    <!-- Missing colors for item_report.xml -->
+    <color name="red_text">#D32F2F</color>
+    <color name="text_muted">#757575</color>
+
+    <!-- Admin User List Colors -->
+    <color name="bg">#F5F5F5</color>
+    <color name="chip_blue_text">#1A237E</color>
+    <color name="green_text">#1B5E20</color>
+    <color name="orange_text">#E65100</color>
 </resources>

@@ -1,24 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Owner approval" android:textStyle="bold" android:textSize="22sp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Marc Dumont . 42 avg" android:textColor="@color/text_muted"/>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:padding="12dp" android:layout_marginTop="16dp" android:orientation="horizontal">
-            <TextView android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="AL" android:background="@drawable/bg_chip_green" android:textColor="@color/green_text"/>
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="12dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Marc Dumont" android:textStyle="bold" android:textSize="18sp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="New owner account"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Driver since Jan 2025"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_grey"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner approval"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#222222" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Owner Profile Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <!-- Avatar -->
+                    <TextView
+                        android:id="@+id/tvAvatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:text="MD"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_avatar_grey"
+                        android:gravity="center"
+                        android:layout_marginEnd="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvOwnerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Marc Dumont"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#222222" />
+
+                        <TextView
+                            android:id="@+id/tvOwnerEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="marc.dumont@email.com"
+                            android:textSize="12sp"
+                            android:textColor="#888888" />
+
+                        <TextView
+                            android:id="@+id/tvDriverSince"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Driver since Jan 2026"
+                            android:textSize="12sp"
+                            android:textColor="#888888" />
+
+                        <TextView
+                            android:id="@+id/tvSpotCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 spot"
+                            android:textSize="12sp"
+                            android:textColor="#888888" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Submitted Details Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submitted Details"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Detail Rows -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+                        android:text="Spot name:" android:textSize="12sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvDetailSpotName" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="Stationnement Centre-Ville"
+                        android:textSize="12sp" android:textColor="#222222"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+                        android:text="Address:" android:textSize="12sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvDetailAddress" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="45 Rue Peel, Montreal"
+                        android:textSize="12sp" android:textColor="#222222"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+                        android:text="Capacity:" android:textSize="12sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvDetailCapacity" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="32 spots"
+                        android:textSize="12sp" android:textColor="#222222"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+                        android:text="Type:" android:textSize="12sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvDetailType" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="Covered"
+                        android:textSize="12sp" android:textColor="#222222"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+                        android:text="ID document:" android:textSize="12sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvViewFile" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="View uploaded file"
+                        android:textSize="12sp" android:textColor="#1565C0"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Admin Note Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADMIN NOTE (OPTION)"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/etAdminNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:hint="Add a note before deciding..."
+                    android:background="@drawable/bg_edittext"
+                    android:padding="12dp"
+                    android:gravity="top"
+                    android:textSize="13sp"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnReject"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:text="Reject"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_red"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnApprove"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:text="Approve"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_green"
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Submitted Details" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="16dp"/>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:padding="12dp" android:layout_marginTop="8dp" android:text='"Spot name: St-Henri Permit Outlet\nAddress: 36 Rue Peel, Montreal\nCapacity: 32 spots\nCovered: Yes\nDocument: View uploaded file\nMaps: View uploaded file"'/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ADMIN NOTE (OPTION)" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="16dp"/>
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_input" android:hint="Add a note before deciding ...." android:layout_marginTop="8dp"/>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp">
-            <Button android:id="@+id/btnReject" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="Reject" android:textAllCaps="false" android:background="@drawable/bg_primary_button" android:textColor="@color/white"/>
-            <Button android:id="@+id/btnApprove" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="6dp" android:text="Approve" android:textAllCaps="false" android:background="@drawable/bg_primary_button" android:textColor="@color/white"/>
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

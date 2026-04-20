@@ -150,7 +150,7 @@ public class SignupActivity extends AppCompatActivity {
     private void navigateToHome(String role) {
         Intent intent;
         if ("owner".equalsIgnoreCase(role)) {
-            intent = new Intent(SignupActivity.this, OwnerHomeActivity.class);
+            intent = new Intent(SignupActivity.this, OwnerDashboardActivity.class);
         } else {
             intent = new Intent(SignupActivity.this, HomeActivity.class);
         }
