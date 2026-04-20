@@ -66,9 +66,9 @@ public class SplashActivity extends AppCompatActivity {
                 .setStartDelay(1500)
                 .start();
 
-        // Navigate to MainActivity after 3.5 seconds
+        // Navigate to HomeActivity after 3.5 seconds
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
             startActivity(intent);
             // Add a smooth fade-out transition
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

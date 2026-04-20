@@ -3,59 +3,257 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@color/accent_blue">
+    android:background="#F5F5F5">
 
-    <TextView
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Admin Dashboard"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="@color/primary_dark" />
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Navigate across role dashboards for administration."
-        android:textSize="14sp"
-        android:textColor="#5F6368" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_view_driver_dashboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Open Driver Dashboard"
-        android:textAllCaps="false" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="System Overview"
+                android:textSize="12sp"
+                android:textColor="#888888" />
 
-    <Button
-        android:id="@+id/btn_view_owner_dashboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Open Owner Dashboard"
-        android:textAllCaps="false" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Panel"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#222222" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_review_reported_spots"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Review Reported Spots"
-        android:textAllCaps="false" />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_circle_blue"
+            android:src="@drawable/ic_home"
+            android:padding="10dp"
+            android:contentDescription="Admin icon" />
+    </LinearLayout>
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/btn_admin_logout"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Stats Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_white"
+                    android:padding="12dp"
+                    android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Total Users" android:textSize="11sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvTotalUsers" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="1,284" android:textSize="28sp"
+                        android:textStyle="bold" android:textColor="#222222"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="+54 this week" android:textSize="10sp" android:textColor="#4CAF50"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_white"
+                    android:padding="12dp"
+                    android:layout_marginStart="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Active Spots" android:textSize="11sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvActiveSpots" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="87" android:textSize="28sp"
+                        android:textStyle="bold" android:textColor="#222222"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="12 cities" android:textSize="10sp" android:textColor="#888888"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Stats Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_white"
+                    android:padding="12dp"
+                    android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Pending Owners" android:textSize="11sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvPendingOwners" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="6" android:textSize="28sp"
+                        android:textStyle="bold" android:textColor="#FF9800"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="awaiting review" android:textSize="10sp" android:textColor="#FF9800"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_white"
+                    android:padding="12dp"
+                    android:layout_marginStart="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Open Reports" android:textSize="11sp" android:textColor="#888888"/>
+                    <TextView android:id="@+id/tvOpenReports" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="14" android:textSize="28sp"
+                        android:textStyle="bold" android:textColor="#F44336"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="3 critical" android:textSize="10sp" android:textColor="#F44336"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Platform Activity Chart Placeholder -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="14dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLATFORM ACTIVITY (7D)"
+                    android:textSize="11sp"
+                    android:textColor="#888888"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Simple bar chart representation -->
+                <LinearLayout
+                    android:id="@+id/chartContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:layout_marginBottom="4dp">
+
+                    <!-- Bars will be added programmatically -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="M" android:textSize="10sp"
+                        android:textColor="#888888" android:gravity="center"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="T" android:textSize="10sp"
+                        android:textColor="#888888" android:gravity="center"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="W" android:textSize="10sp"
+                        android:textColor="#888888" android:gravity="center"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="T" android:textSize="10sp"
+                        android:textColor="#888888" android:gravity="center"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="F" android:textSize="10sp"
+                        android:textColor="#888888" android:gravity="center"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="S" android:textSize="10sp"
+                        android:textColor="#888888" android:gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Recent Activity -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RECENT ACTIVITY"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecentActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textAllCaps="false" />
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
 
+        <LinearLayout android:id="@+id/navOverview" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_grid" android:contentDescription="Overview"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Overview" android:textSize="10sp" android:textColor="#1565C0"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/navUsers" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_people" android:contentDescription="Users"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Users" android:textSize="10sp" android:textColor="#888888"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/navSpots" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_home" android:contentDescription="Spots"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Spots" android:textSize="10sp" android:textColor="#888888"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/navReports" android:layout_width="0dp"
+            android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center" android:padding="4dp">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                android:src="@drawable/ic_flag" android:contentDescription="Reports"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Reports" android:textSize="10sp" android:textColor="#888888"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

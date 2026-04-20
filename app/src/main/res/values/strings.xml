@@ -1,11 +1,97 @@
 <resources>
     <string name="app_name">Smartpark</string>
-    <string name="status_available">Available</string>
-    <string name="status_occupied">Occupied</string>
-    <string name="selected_location_format">Selected: %1$.5f, %2$.5f</string>
+    <!-- My Spots Fragment -->
+    <string name="others_value_record">Other\'s Value Record</string>
+    <string name="welcome_back">Welcome back, Marc</string>
+    <string name="actual_value">Actual Value</string>
+    <string name="accrued">Accrued</string>
+    <string name="todays_booking">Today\'s Booking</string>
+    <string name="todays_reservation">Today\'s Reservation</string>
+    <string name="my_spots_title">My Spots</string>
+    <string name="add_parking_spot_button">ADD Parking Spot</string>
+    <string name="spot_undercover">Undercover</string>
 
-    <string-array name="spot_status_options">
-        <item>@string/status_available</item>
-        <item>@string/status_occupied</item>
-    </string-array>
+    <!-- Add / Edit Spot strings -->
+    <string name="add_new_spot">Add new Spot</string>
+    <string name="edit_spots_title">Edit Spots</string>
+    <string name="spot_name_label">Spot Name</string>
+    <string name="address_label">ADDRESS</string>
+    <string name="total_spot_label">TOTAL SPOT</string>
+    <string name="spot_type_label">SPOT TYPE</string>
+    <string name="status_label">STATUS</string>
+    <string name="open_status">Open</string>
+    <string name="closed_status">Closed</string>
+    <string name="occupied_status">Occupied</string>
+    <string name="pricing_label">PRICING</string>
+    <string name="free_pricing">Free</string>
+    <string name="paid_pricing">Paid</string>
+    <string name="operating_hours_label">OPERATING HOURS</string>
+    <string name="open_at_hint">Open At</string>
+    <string name="close_at_hint">Close At</string>
+    <string name="capacity_label">CAPACITY</string>
+    <string name="description_label">DESCRIPTION</string>
+    <string name="discard_button">DISCARD</string>
+    <string name="update_button">UPDATE</string>
+
+    <!-- Spot Detail Fragment -->
+    <string name="spots_available">Spots - available</string>
+    <string name="slot_status_available">Available</string>
+    <string name="slot_status_occupied">Occupied</string>
+
+    <!-- Admin Panel strings -->
+    <string name="system_overview">System Overview</string>
+    <string name="admin_panel">Admin Panel</string>
+    <string name="active_spots">Active Spots</string>
+    <string name="pending_owners">Pending owners</string>
+    <string name="winding_owner">winding owner</string>
+    <string name="new_owner_registered">New owner registered</string>
+    <string name="spot_flagged_insolvent">Spot flagged Insolvent</string>
+    <string name="pending_verification">pending verification. 3m</string>
+    <string name="owner">Owner</string>
+    <string name="total_users">Total Users</string>
+    <string name="total_owners">Total Owners</string>
+    <string name="ciphers_report">Ciphers report</string>
+    <string name="confirmed">confirmed</string>
+    <string name="user_management">User management</string>
+    <string name="accounts_count">accounts</string>
+    <string name="owner_approval">Owner approval</string>
+    <string name="submitted_details">Submitted Details</string>
+    <string name="spot_name_detail">Spot name</string>
+    <string name="city_label">City</string>
+    <string name="country_label">Country</string>
+    <string name="phone_number_label">Phone number</string>
+    <string name="admin_note_option">ADMIN NOTE (OPTION)</string>
+    <string name="add_note_hint">Add a note before deciding ...</string>
+    <string name="approve_button">Approve</string>
+    <string name="reports_and_flags">Reports &amp; flags</string>
+    <string name="reports_count">reports</string>
+    <string name="optional">optional</string>
+    <string name="critical">CRITICAL</string>
+    <string name="user_status_free_trial">User status: Free Trial</string>
+    <string name="hypervisor_warning">Hypervisor by 3rd parties for responsible monitoring below each data</string>
+    <string name="suspended_user">Suspended user</string>
+    <string name="inaccessible_spot_data">Inaccessible spot data - spot ID</string>
+    <string name="flagged_personal_availability">5 others flagged personal availability errors from this owner</string>
+    <string name="warning">Warning</string>
+    <string name="warn_owner">Warn owner</string>
+    <string name="view_spots_button">View Spots</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_my_spots">My Spots</string>
+    <string name="nav_admin">Admin</string>
+
+    <!-- Miscellaneous -->
+    <string name="edit_parking_spot">Edit Parking Spot</string>
+    <string name="save_spot_button">Save Spot</string>
+    <string name="update_spot_button">Update Spot</string>
+    <string name="fill_required_fields">Please fill all required fields</string>
+    <string name="total_spots_number_error">Total Spots must be a number</string>
+    <string name="invalid_hourly_rate">Invalid hourly rate</string>
+    <string name="spot_updated">Spot updated</string>
+    <string name="spot_added">Spot added</string>
+    <string name="zero_value">0</string>
+    <string name="default_open_time">08:00</string>
+    <string name="default_close_time">22:00</string>
+    <string name="hourly_rate_hint">Hourly Rate (CAD)</string>
+    <string name="description_hint">Description (Optional)</string>
 </resources>

@@ -1,124 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_grey"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:layout_marginEnd="12dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit Spots"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#222222" />
+    </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Spot Name">
-            <EditText android:id="@+id/etSpotName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Address">
-            <EditText android:id="@+id/etAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            android:layout_marginTop="8dp" />
-        <RadioGroup android:id="@+id/rgStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton android:id="@+id/radioOpen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open" />
-            <RadioButton android:id="@+id/radioClosed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Closed" />
-        </RadioGroup>
-
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Open At">
-                <EditText android:id="@+id/etOpenTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Close At">
-                <EditText android:id="@+id/etCloseTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Capacity">
-            <EditText android:id="@+id/etTotalSpots"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Description">
-            <EditText android:id="@+id/etDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="3" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Hidden fields for consistency -->
-        <Spinner android:id="@+id/spinnerSpotType" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
-        <Spinner android:id="@+id/spinnerPricing" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
-        <EditText android:id="@+id/etHourlyRate" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <Button android:id="@+id/btnDiscard"
-                android:layout_width="0dp"
+            <!-- Spot Name -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="DISCARD"
-                android:backgroundTint="@android:color/darker_gray"
-                android:layout_marginEnd="8dp" />
+                android:text="Spot Name"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
 
-            <Button android:id="@+id/btnUpdate"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/etSpotName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Spot C - Rue Sherbrooke"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Status -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="UPDATE"
-                android:backgroundTint="@color/primary_blue" />
+                android:text="STATUS"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnStatusOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Open"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_green"
+                    android:layout_marginEnd="6dp"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnStatusClosed"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Closed"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_grey"
+                    android:layout_marginEnd="6dp"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnStatusOccupied"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Occupied"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_grey"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Opens At / Close At -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opens At"
+                        android:textSize="12sp"
+                        android:textColor="#888888"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etOpenTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:hint="08:00"
+                        android:background="@drawable/bg_edittext"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textSize="14sp"
+                        android:inputType="time" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Close At"
+                        android:textSize="12sp"
+                        android:textColor="#888888"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etCloseTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:hint="23:00"
+                        android:background="@drawable/bg_edittext"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textSize="14sp"
+                        android:inputType="time" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Capacity -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CAPACITY"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etCapacity"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="28 Spots"
+                android:inputType="number"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Description -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DESCRIPTION"
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="Covered lot near metro station"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="12dp"
+                android:textSize="14sp"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnDiscard"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:text="Discard"
+                    android:textColor="#888888"
+                    android:background="@drawable/bg_button_outline"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:text="Update"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_green"
+                    android:textSize="15sp" />
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

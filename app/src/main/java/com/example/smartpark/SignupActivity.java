@@ -157,8 +157,6 @@ public class SignupActivity extends AppCompatActivity {
         Intent intent;
         if ("owner".equalsIgnoreCase(role)) {
             intent = new Intent(SignupActivity.this, OwnerDashboardActivity.class);
-        } else if ("admin".equalsIgnoreCase(role)) {
-            intent = new Intent(SignupActivity.this, AdminDashboardActivity.class);
         } else {
             intent = new Intent(SignupActivity.this, HomeActivity.class);
         }
