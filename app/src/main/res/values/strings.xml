@@ -93,5 +93,12 @@
     <string name="default_open_time">08:00</string>
     <string name="default_close_time">22:00</string>
     <string name="hourly_rate_hint">Hourly Rate (CAD)</string>
-    <string name="description_hint">Description (Optional)</string>
+    <string name="description_hint">Description (Optional)</string>    <string name="status_available">Available</string>
+    <string name="selected_location_format">Selected: %1$s, %2$s</string>
+
+    <string-array name="spot_status_options">
+        <item>Available</item>
+        <item>Occupied</item>
+        <item>Reserved</item>
+    </string-array>
 </resources>
