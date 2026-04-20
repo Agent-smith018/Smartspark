@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:fitsSystemWindows="true">
 
     <!-- Header -->
     <LinearLayout
@@ -11,7 +12,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#FFFFFF"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
         android:gravity="center_vertical"
         android:elevation="4dp">
 
@@ -37,13 +40,16 @@
                 android:textColor="#222222" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_circle_blue"
-            android:src="@drawable/ic_home"
-            android:padding="10dp"
-            android:contentDescription="Admin icon" />
+        <ImageButton
+            android:id="@+id/btn_admin_logout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_lock_power_off"
+            android:tint="#C5221F"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="Logout" />
     </LinearLayout>
 
     <ScrollView

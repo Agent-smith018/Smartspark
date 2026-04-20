@@ -6,9 +6,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OwnerHomeActivity extends AppCompatActivity {
 
@@ -17,9 +16,13 @@ public class OwnerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_home);
 
-        enforceOwnerAccess();
-
+        ExtendedFloatingActionButton btnAddSpot = findViewById(R.id.btn_add_spot_owner);
         Button btnLogout = findViewById(R.id.btn_logout_owner);
+
+        btnAddSpot.setOnClickListener(v -> {
+            Intent intent = new Intent(OwnerHomeActivity.this, AddParkingSpotActivity.class);
+            startActivity(intent);
+        });
 
         btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -27,23 +30,5 @@ public class OwnerHomeActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-    }
-
-    private void enforceOwnerAccess() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            startActivity(new Intent(OwnerHomeActivity.this, MainActivity.class));
-            finish();
-            return;
-        }
-
-        FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid()).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    String role = documentSnapshot.getString("role");
-                    if (!"owner".equalsIgnoreCase(role)) {
-                        startActivity(new Intent(OwnerHomeActivity.this, HomeActivity.class));
-                        finish();
-                    }
-                });
     }
 }

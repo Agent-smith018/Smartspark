@@ -3,133 +3,111 @@ package com.example.smartpark;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.example.smartpark.R;
-import com.example.smartpark.OwnerSpotsAdapter;
-import com.example.smartpark.ParkingLot;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OwnerDashboardActivity extends AppCompatActivity {
 
-    private TextView tvWelcome, tvTotalSpots, tvAvailableNow, tvTodayBookings, tvRating;
-    private RecyclerView rvSpots;
-    private Button btnAddSpot;
-    private LinearLayout navOverview, navSpots, navProfile;
-
-    private FirebaseFirestore db;
-    private FirebaseAuth auth;
-    private List<ParkingLot> lotList = new ArrayList<>();
-    private OwnerSpotsAdapter adapter;
+    private android.widget.TextView tvStatTotal;
+    private android.widget.TextView tvStatAvailable;
+    private android.widget.TextView tvStatOccupied;
+    private com.google.firebase.firestore.ListenerRegistration statsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_dashboard);
 
-        db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        enforceOwnerAccess();
 
-        initViews();
-        setupRecyclerView();
-        loadOwnerData();
-        setupNavigation();
+        tvStatTotal = findViewById(R.id.tv_stat_total);
+        tvStatAvailable = findViewById(R.id.tv_stat_available);
+        tvStatOccupied = findViewById(R.id.tv_stat_occupied);
 
-        btnAddSpot.setOnClickListener(v ->
-                startActivity(new Intent(this, AddSpotActivity.class)));
-    }
+        android.view.View btnManageSpots = findViewById(R.id.btn_manage_spots);
+        android.view.View btnAddSpot = findViewById(R.id.btn_add_spot);
+        android.view.View btnOwnerProfile = findViewById(R.id.btn_owner_profile);
+        android.view.View btnHistory = findViewById(R.id.btn_history);
+        android.view.View btnParkingRequests = findViewById(R.id.btn_parking_requests);
+        android.view.View btnOwnerLogout = findViewById(R.id.btn_owner_logout);
 
-    private void initViews() {
-        tvWelcome = findViewById(R.id.tvWelcome);
-        tvTotalSpots = findViewById(R.id.tvTotalSpots);
-        tvAvailableNow = findViewById(R.id.tvAvailableNow);
-        tvTodayBookings = findViewById(R.id.tvTodayBookings);
-        tvRating = findViewById(R.id.tvRating);
-        rvSpots = findViewById(R.id.rvSpots);
-        btnAddSpot = findViewById(R.id.btnAddSpot);
-        navOverview = findViewById(R.id.navOverview);
-        navSpots = findViewById(R.id.navSpots);
-        navProfile = findViewById(R.id.navProfile);
-    }
-
-    private void setupRecyclerView() {
-        adapter = new OwnerSpotsAdapter(lotList, lot -> {
-            // Navigate to spot list for this lot
-            Intent intent = new Intent(this, SpotListActivity.class);
-            intent.putExtra("lotId", lot.getId());
-            intent.putExtra("lotName", lot.getName());
+        btnManageSpots.setOnClickListener(v -> startActivity(new Intent(OwnerDashboardActivity.this, OwnerSpotActivity.class)));
+        btnAddSpot.setOnClickListener(v -> startActivity(new Intent(OwnerDashboardActivity.this, AddParkingSpotActivity.class)));
+        btnOwnerProfile.setOnClickListener(v -> startActivity(new Intent(OwnerDashboardActivity.this, OwnerProfileActivity.class)));
+        btnHistory.setOnClickListener(v -> startActivity(new Intent(OwnerDashboardActivity.this, OwnerHistoryActivity.class)));
+        btnParkingRequests.setOnClickListener(v -> startActivity(new Intent(OwnerDashboardActivity.this, OwnerRequestsActivity.class)));
+        btnOwnerLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(OwnerDashboardActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            finish();
         });
-        rvSpots.setLayoutManager(new LinearLayoutManager(this));
-        rvSpots.setAdapter(adapter);
+        
+        loadStatistics();
     }
-
-    private void loadOwnerData() {
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null) return;
-
-        String uid = user.getUid();
-
-        // Load owner display name
-        db.collection("users").document(uid).get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        String name = doc.getString("name");
-                        tvWelcome.setText("Welcome back, " + (name != null ? name : "Owner") + "!");
+    
+    private void loadStatistics() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+        
+        statsListener = FirebaseFirestore.getInstance().collection("parking_spots")
+                .whereEqualTo("ownerId", currentUser.getUid())
+                .addSnapshotListener((value, error) -> {
+                    if (error != null || value == null) {
+                        return;
                     }
-                });
-
-        // Load owner's parking lots
-        db.collection("parkingLots")
-                .whereEqualTo("ownerId", uid)
-                .addSnapshotListener((snapshots, e) -> {
-                    if (e != null || snapshots == null) return;
-
-                    lotList.clear();
-                    int totalSpots = 0, availableSpots = 0;
-
-                    for (QueryDocumentSnapshot doc : snapshots) {
-                        ParkingLot lot = doc.toObject(ParkingLot.class);
-                        lot.setId(doc.getId());
-                        lotList.add(lot);
-                        totalSpots += lot.getTotalSpots();
-                        availableSpots += lot.getAvailableSpots();
+                    int total = 0;
+                    int available = 0;
+                    int occupied = 0;
+                    
+                    for (com.google.firebase.firestore.QueryDocumentSnapshot doc : value) {
+                        total++;
+                        String status = doc.getString("status");
+                        if ("available".equalsIgnoreCase(status)) {
+                            available++;
+                        } else {
+                            occupied++;
+                        }
                     }
-
-                    tvTotalSpots.setText(String.valueOf(totalSpots));
-                    tvAvailableNow.setText(String.valueOf(availableSpots));
-                    int pct = totalSpots > 0 ? (availableSpots * 100 / totalSpots) : 0;
-                    adapter.notifyDataSetChanged();
-                });
-
-        // Load today's bookings count
-        db.collection("bookings")
-                .whereEqualTo("ownerId", uid)
-                .addSnapshotListener((snapshots, e) -> {
-                    if (e != null || snapshots == null) return;
-                    tvTodayBookings.setText(String.valueOf(snapshots.size()));
+                    
+                    tvStatTotal.setText(String.valueOf(total));
+                    tvStatAvailable.setText(String.valueOf(available));
+                    tvStatOccupied.setText(String.valueOf(occupied));
                 });
     }
-
-    private void setupNavigation() {
-        navOverview.setOnClickListener(v -> { /* Already here */ });
-        navSpots.setOnClickListener(v ->
-                startActivity(new Intent(this, SpotListActivity.class)));
-        navProfile.setOnClickListener(v ->
-                startActivity(new Intent(this, UserManagmentActivity.class)));
-    }
-
+    
     @Override
-    protected void onResume() {
-        super.onResume();
-        loadOwnerData();
+    protected void onDestroy() {
+        super.onDestroy();
+        if (statsListener != null) {
+            statsListener.remove();
+        }
+    }
+
+    private void enforceOwnerAccess() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(OwnerDashboardActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"owner".equalsIgnoreCase(role)) {
+                        if ("admin".equalsIgnoreCase(role)) {
+                            startActivity(new Intent(OwnerDashboardActivity.this, AdminDashboardActivity.class));
+                        } else {
+                            startActivity(new Intent(OwnerDashboardActivity.this, HomeActivity.class));
+                        }
+                        finish();
+                    }
+                });
     }
 }

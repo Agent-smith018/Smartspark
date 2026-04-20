@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartpark.R;
 import com.example.smartpark.RecentActivityAdapter;
 import com.example.smartpark.ActivityItem;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AdminDashboardActivity extends AppCompatActivity {
@@ -23,13 +27,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private LinearLayout chartContainer;
     private RecyclerView rvRecentActivity;
     private LinearLayout navOverview, navUsers, navSpots, navReports;
+    private ImageButton btnLogout;
 
     private FirebaseFirestore db;
     private List<ActivityItem> activityList = new ArrayList<>();
     private RecentActivityAdapter activityAdapter;
-
-    // Sample weekly data (replace with real Firestore data)
-    private final int[] weeklyData = {60, 40, 75, 55, 80, 45};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         initViews();
         setupRecyclerView();
-        drawChart();
         loadDashboardData();
         setupNavigation();
     }
@@ -56,6 +57,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         navUsers = findViewById(R.id.navUsers);
         navSpots = findViewById(R.id.navSpots);
         navReports = findViewById(R.id.navReports);
+        btnLogout = findViewById(R.id.btn_admin_logout);
     }
 
     private void setupRecyclerView() {
@@ -64,16 +66,16 @@ public class AdminDashboardActivity extends AppCompatActivity {
         rvRecentActivity.setAdapter(activityAdapter);
     }
 
-    private void drawChart() {
+    private void drawChart(int[] dailyActivityCounts) {
         chartContainer.removeAllViews();
         int maxValue = 0;
-        for (int v : weeklyData) if (v > maxValue) maxValue = v;
+        for (int v : dailyActivityCounts) if (v > maxValue) maxValue = v;
 
         int chartHeightDp = 80;
         float density = getResources().getDisplayMetrics().density;
         int chartHeightPx = (int)(chartHeightDp * density);
 
-        for (int i = 0; i < weeklyData.length; i++) {
+        for (int i = 0; i < dailyActivityCounts.length; i++) {
             LinearLayout barWrapper = new LinearLayout(this);
             LinearLayout.LayoutParams wrapperParams = new LinearLayout.LayoutParams(
                     0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
@@ -84,12 +86,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
             barWrapper.setGravity(Gravity.BOTTOM);
 
             View bar = new View(this);
-            int barHeight = maxValue > 0 ? (int)((weeklyData[i] / (float) maxValue) * chartHeightPx) : 4;
+            int barHeight = maxValue > 0 ? (int)((dailyActivityCounts[i] / (float) maxValue) * chartHeightPx) : (int)(4 * density);
+            if (barHeight < (int)(4 * density)) barHeight = (int)(4 * density);
+            
             LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, barHeight);
             bar.setLayoutParams(barParams);
             bar.setBackgroundColor(0xFF1565C0); // Admin blue
-            bar.setAlpha(0.7f + (0.3f * weeklyData[i] / maxValue));
+            bar.setAlpha(maxValue > 0 ? (0.6f + (0.4f * dailyActivityCounts[i] / maxValue)) : 0.4f);
 
             barWrapper.addView(bar);
             chartContainer.addView(barWrapper);
@@ -105,8 +109,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 });
 
         // Active spots count
-        db.collection("parkingLots")
-                .whereEqualTo("status", "Open")
+        db.collection("parking_spots")
+                .whereEqualTo("status", "available")
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null || snapshots == null) return;
                     tvActiveSpots.setText(String.valueOf(snapshots.size()));
@@ -122,30 +126,49 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 });
 
         // Open reports
-        db.collection("reports")
-                .whereEqualTo("resolved", false)
+        db.collection("spot_reports")
+                .whereEqualTo("state", "open")
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null || snapshots == null) return;
-                    int critical = 0;
-                    for (QueryDocumentSnapshot doc : snapshots) {
-                        Boolean isCritical = doc.getBoolean("critical");
-                        if (Boolean.TRUE.equals(isCritical)) critical++;
-                    }
                     tvOpenReports.setText(String.valueOf(snapshots.size()));
                 });
 
-        // Recent activity
+        // Recent activity and Chart Data
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -6);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        Date sevenDaysAgo = cal.getTime();
+
         db.collection("activityLog")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(10)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null || snapshots == null) return;
+                    
                     activityList.clear();
+                    int[] dailyCounts = new int[7];
+                    
                     for (QueryDocumentSnapshot doc : snapshots) {
                         ActivityItem item = doc.toObject(ActivityItem.class);
-                        activityList.add(item);
+                        
+                        if (activityList.size() < 10) {
+                            activityList.add(item);
+                        }
+
+                        if (item.getTimestamp() != null) {
+                            Date date = item.getTimestamp().toDate();
+                            if (date.after(sevenDaysAgo)) {
+                                long diff = date.getTime() - sevenDaysAgo.getTime();
+                                int dayIndex = (int) (diff / (1000 * 60 * 60 * 24));
+                                if (dayIndex >= 0 && dayIndex < 7) {
+                                    dailyCounts[dayIndex]++;
+                                }
+                            }
+                        }
                     }
                     activityAdapter.notifyDataSetChanged();
+                    drawChart(dailyCounts);
                 });
     }
 
@@ -157,5 +180,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SpotOversightActivity.class)));
         navReports.setOnClickListener(v ->
                 startActivity(new Intent(this, ReportFlagsActivity.class)));
+
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(AdminDashboardActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 }

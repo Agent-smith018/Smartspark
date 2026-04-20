@@ -32,5 +32,15 @@
         <activity android:name=".OwnerApprovalActivity" android:exported="false"/>
         <activity android:name=".SpotOversightActivity" android:exported="false"/>
         <activity android:name=".ReportFlagsActivity" android:exported="false"/>
+        <activity android:name=".ProfileActivity" android:exported="false"/>
+        <activity android:name=".DriverFavoritesActivity" android:exported="false"/>
+        <activity android:name=".DriverHistoryActivity" android:exported="false"/>
+        <activity android:name=".OwnerHomeActivity" android:exported="false"/>
+        <activity android:name=".OwnerProfileActivity" android:exported="false"/>
+        <activity android:name=".OwnerRequestsActivity" android:exported="false"/>
+        <activity android:name=".OwnerHistoryActivity" android:exported="false"/>
+        <activity android:name=".OwnerSpotActivity" android:exported="false"/>
+        <activity android:name=".AdminReportsActivity" android:exported="false"/>
+        <activity android:name=".AddParkingSpotActivity" android:exported="false"/>
     </application>
 </manifest>

@@ -3,6 +3,7 @@ package com.example.smartpark;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private TextInputEditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvSignup, tvForgotPassword;
@@ -57,11 +59,13 @@ public class MainActivity extends AppCompatActivity {
         tvForgotPassword = findViewById(R.id.tv_forgot_password);
         progressBar = findViewById(R.id.progressBar);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        if (findViewById(R.id.main) != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
         btnLogin.setOnClickListener(v -> loginUser());
 
@@ -90,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(MainActivity.this, "Reset link sent to your email!", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        String error = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                        Toast.makeText(MainActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -114,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        // Hardcoded Admin Access
+        if ("admin@gmail.com".equals(email) && "admin@123".equals(password)) {
+            navigateByRole("admin");
+            finish();
+            return;
+        }
+
         progressBar.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
 
@@ -126,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             progressBar.setVisibility(View.GONE);
                             btnLogin.setEnabled(true);
-                            Toast.makeText(MainActivity.this, "Unable to get user information", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Login successful but user is null", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         progressBar.setVisibility(View.GONE);
@@ -145,17 +157,19 @@ public class MainActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     String role = document.getString("role");
+                    Log.d(TAG, "User role: " + role);
                     navigateByRole(role);
                     finish();
                 } else {
+                    Log.d(TAG, "No user document found for UID: " + uid);
                     navigateByRole(null);
                     finish();
                 }
             } else {
                 btnLogin.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Error fetching user role", Toast.LENGTH_SHORT).show();
-                navigateByRole(null);
-                finish();
+                String error = task.getException() != null ? task.getException().getMessage() : "Firestore fetch failed";
+                Log.e(TAG, "Error fetching user role", task.getException());
+                Toast.makeText(MainActivity.this, "Role Error: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -167,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
         } else if ("admin".equalsIgnoreCase(role)) {
             intent = new Intent(MainActivity.this, AdminDashboardActivity.class);
         } else {
-            // Default driver flow.
             intent = new Intent(MainActivity.this, HomeActivity.class);
         }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
@@ -179,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        String errorMessage = exception.getMessage();
+        Log.e(TAG, "Login error", exception);
+
         if (exception instanceof FirebaseAuthInvalidUserException) {
             etEmail.setError("No account found with this email");
             etEmail.requestFocus();
@@ -186,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
             etPassword.setError("Incorrect password");
             etPassword.requestFocus();
         } else {
-            Toast.makeText(MainActivity.this, "Login failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Login failed: " + errorMessage, Toast.LENGTH_LONG).show();
         }
     }
 }
